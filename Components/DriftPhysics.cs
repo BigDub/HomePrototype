@@ -19,12 +19,12 @@ namespace ShipPrototype.Components
             drift_speed = d_speed;
         }
 
-        public override void update()
+        public override void update(float elapsed)
         {
             Vector2 pos = entity_.spatial.translation_;
 
-            velocity_.X = MathHelper.Clamp(velocity_.X + drift_speed * (float)(Locator.getRandom().NextDouble() * 2.0 - 1.0), -max_speed.X, max_speed.X);
-            velocity_.Y = MathHelper.Clamp(velocity_.Y + drift_speed * (float)(Locator.getRandom().NextDouble() * 2.0 - 1.0), -max_speed.Y, max_speed.Y);
+            velocity_.X = MathHelper.Clamp(velocity_.X + drift_speed * elapsed * (float)(Locator.getRandom().NextDouble() * 2.0 - 1.0), -max_speed.X, max_speed.X);
+            velocity_.Y = MathHelper.Clamp(velocity_.Y + drift_speed * elapsed * (float)(Locator.getRandom().NextDouble() * 2.0 - 1.0), -max_speed.Y, max_speed.Y);
 
             if (pos.X > max_drift.X)
             {
@@ -47,7 +47,7 @@ namespace ShipPrototype.Components
                 velocity_.Y = MathHelper.Max(velocity_.Y, 0);
             }
 
-            base.update();
+            base.update(elapsed);
         }
     }
 }

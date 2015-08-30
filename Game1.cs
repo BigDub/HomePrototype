@@ -20,14 +20,12 @@ namespace ShipPrototype
     /// </summary>
     public class Game1 : Microsoft.Xna.Framework.Game
     {
-        const float UPDATE_TIME = 62.5f;
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
         GameEntity player;
         GameEntity world;
         GameEntity test;
 
-        float lag = 0;
         Ship ship;
         public Game1()
         {
@@ -101,20 +99,16 @@ namespace ShipPrototype
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Update(GameTime gameTime)
         {
-            float elapsed = (float) gameTime.ElapsedGameTime.TotalMilliseconds;
-            lag += elapsed;
+            float elapsed = (float) gameTime.ElapsedGameTime.TotalSeconds;
 
-            while (lag > UPDATE_TIME)
-            {
-                Locator.getInputHandler().update();
-                Locator.getComponentManager().update();
-                lag -= UPDATE_TIME;
+            Locator.getInputHandler().update(elapsed);
+            Locator.getComponentManager().update(elapsed);
 
-                MouseState ms = Mouse.GetState();
-                Vector2 mous = new Vector2(ms.X, ms.Y);
-                Vector2 spot = ship.entity_.spatial.worldToLocal(mous);
-                test.spatial.translation_ = spot;
-            }
+            MouseState ms = Mouse.GetState();
+            Vector2 mous = new Vector2(ms.X, ms.Y);
+            Vector2 spot = ship.entity_.spatial.worldToLocal(mous);
+            test.spatial.translation_ = spot;
+            
             // TODO: Add your update logic here
 
             base.Update(gameTime);

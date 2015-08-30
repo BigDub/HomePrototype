@@ -30,8 +30,8 @@ namespace ShipPrototype
             entity_.spatial = new Components.SpatialComponent(entity_, world.spatial);
             //entity_.spatial = new Components.SpatialComponent(entity_, new Vector2(-width_ / 2, -height_ / 2), 0, Vector2.One);
             //entity_.physic = new Components.PhysicsComponent(entity_, Vector2.Zero, 0f, Vector2.Zero);
-            entity_.physic = new Components.DriftPhysics(entity_, new Vector2(10), new Vector2(0.1f), 0.01f);
-            //entity_.physic = new Components.PhysicsComponent(entity_, new Vector2(0.1f, 0.1f), 0.01f, new Vector2(-0.001f));
+            entity_.physic = new Components.DriftPhysics(entity_, new Vector2(100), new Vector2(1), 0.1f);
+            //entity_.physic = new Components.PhysicsComponent(entity_, new Vector2(1, 1), 0.1f, new Vector2(-0.01f));
 
             Locator.getComponentManager().addEntity(entity_);
             for (int x = -width_ / 2; x < width_ / 2; ++x)

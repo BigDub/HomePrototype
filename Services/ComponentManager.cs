@@ -111,15 +111,15 @@ namespace ShipPrototype.Services
             }
         }
 
-        public void update()
+        public void update(float elapsed)
         {
             foreach (ControllerComponent controller in controllers_)
             {
-                controller.update();
+                controller.update(elapsed);
             }
             foreach (PhysicsComponent physic in physics_)
             {
-                physic.update();
+                physic.update(elapsed);
             }
         }
 

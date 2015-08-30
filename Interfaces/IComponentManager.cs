@@ -14,7 +14,7 @@ namespace ShipPrototype.Interfaces
 
         void removeEntity(GameEntity entity);
 
-        void update();
+        void update(float elapsed);
 
         void render(SpriteBatch spriteBatch);
     }

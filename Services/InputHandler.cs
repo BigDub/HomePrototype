@@ -26,7 +26,7 @@ namespace ShipPrototype.Services
         public event EventHandler<KeyboardEventArgs> keyPress, keyRelease;
         public event EventHandler<MouseEventArgs> mousePress, mouseRelease;
 
-        public void update()
+        public void update(float elapsed)
         {
             #region MOUSE
             pms_ = ms_;

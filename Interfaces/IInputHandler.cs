@@ -41,7 +41,7 @@ namespace ShipPrototype.Interfaces
 {
     interface IInputHandler
     {
-        void update();
+        void update(float elapsed);
 
         bool isKeyDown(Keys key);
 

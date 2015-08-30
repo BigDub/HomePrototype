@@ -14,7 +14,7 @@ namespace ShipPrototype.Services
             //TODO: Log that the null service has been used.
         }
 
-        public void update() { }
+        public void update(float elapsed) { }
 
         public bool isKeyDown(Keys key)
         {

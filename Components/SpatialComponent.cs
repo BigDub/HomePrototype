@@ -51,7 +51,7 @@ namespace ShipPrototype.Components
                 * Matrix.CreateTranslation(translation_.X, translation_.Y, 0);
             if (parent_ != null)
             {
-                return parent_.getMatrix() * srt;
+                return srt * parent_.getMatrix();
             }
             return srt;
         }

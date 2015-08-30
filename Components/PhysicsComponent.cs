@@ -44,11 +44,11 @@ namespace ShipPrototype.Components
             growth_ = Vector2.Zero;
         }
 
-        public virtual void update()
+        public virtual void update(float elapsed)
         {
-            entity_.spatial.rotation_ += spin_;
-            entity_.spatial.translation_ += velocity_;
-            entity_.spatial.scale_ += growth_;
+            entity_.spatial.rotation_ += spin_ * elapsed;
+            entity_.spatial.translation_ += velocity_ * elapsed;
+            entity_.spatial.scale_ += growth_ * elapsed;
         }
 
         protected float spin_;

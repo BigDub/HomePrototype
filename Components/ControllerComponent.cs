@@ -9,6 +9,7 @@ namespace ShipPrototype.Components
 {
     class ControllerComponent
     {
+        private static float speed = 100;
         GameEntity entity_;
 
         ControllerComponent parent_;
@@ -27,7 +28,7 @@ namespace ShipPrototype.Components
             dir_dirty = true;
         }
 
-        public void update()
+        public void update(float elapsed)
         {
             if (dir_dirty)
             {
@@ -47,7 +48,7 @@ namespace ShipPrototype.Components
             }
             if (direction.LengthSquared() > 0)
             {
-                entity_.spatial.translation_ += direction;
+                entity_.spatial.translation_ += direction * speed * elapsed;
             }
         }
 
