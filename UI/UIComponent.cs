@@ -14,31 +14,48 @@ namespace ShipPrototype.UI
         public Vector2 loc_;
         protected Vector2 size_;
         //Left, top, right, bottom
-        protected Vector4 margin_, padding_;
+        public Vector2 padding_;
+        public bool center = true;
 
+        public Vector2 loc
+        {
+            get
+            {
+                if (parent_ != null)
+                {
+                    return parent_.loc + loc_ + padding_;
+                }
+                else
+                {
+                    return loc_ + padding_;
+                }
+            }
+        }
         public Vector2 size
         {
             get
             {
-                return new Vector2(size.X + padding_.X + padding_.Z, size.Y + padding_.Y + padding_.W);
+                return new Vector2(size_.X + 2 * padding_.X, size_.Y + 2 * padding_.Y);
             }
         }
         public bool isWithin(Vector2 point)
         {
             if (point.X < loc_.X)
                 return false;
-            if (point.X >= loc_.X + size_.X)
+            if (point.X >= loc_.X + size.X)
                 return false;
             if (point.Y < loc_.Y)
                 return false;
-            if (point.Y >= loc_.Y + size_.Y)
+            if (point.Y >= loc_.Y + size.Y)
                 return false;
             return true;
         }
 
         public virtual void pack() { }
 
-        public virtual void click() { }
+        public virtual void click(Vector2 pos) { }
+
+        public virtual void update(float elapsed) { }
 
         public abstract void render(SpriteBatch spriteBatch);
     }

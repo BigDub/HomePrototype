@@ -23,11 +23,13 @@ namespace ShipPrototype.Services
         }
 
         ContentManager content_;
+        Dictionary<String, int> textureNames_;
         List<Texture2D> textures_;
         private TextureManager(GraphicsDevice graphicsDevice, ContentManager content)
         {
             content_ = content;
             textures_ = new List<Texture2D>();
+            textureNames_ = new Dictionary<string, int>();
             blank_ = new Texture2D(graphicsDevice, 1, 1);
             Color[] color = { Color.White };
             blank_.SetData<Color>(color);
@@ -35,8 +37,19 @@ namespace ShipPrototype.Services
 
         public int loadTexture(String name)
         {
-            textures_.Add(content_.Load<Texture2D>(name));
-            return textures_.Count - 1;
+            if (!textureNames_.ContainsKey(name))
+            {
+                int id = textures_.Count;
+                textures_.Add(content_.Load<Texture2D>(name));
+                textureNames_.Add(name, id);
+                return id;
+            }
+            else
+            {
+                int id;
+                textureNames_.TryGetValue(name, out id);
+                return id;
+            }
         }
 
         public Texture2D getTexture(int id)

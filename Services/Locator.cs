@@ -15,28 +15,16 @@ namespace ShipPrototype
         private static ITextureManager texture_;
         private static IComponentManager component_;
         private static Random random_;
+        private static ControlManager control_;
+        private static Ship ship_;
 
         public static void provide(IScreenPrinter printer)
         {
-            if (printer == null)
-            {
-                printer_ = new NullScreenPrinter();
-            }
-            else
-            {
-                printer_ = printer;
-            }
+            printer_ = printer;
         }
         public static void provide(IInputHandler input)
         {
-            if (input == null)
-            {
-                input_ = new NullInputHandler();
-            }
-            else
-            {
-                input_ = input;
-            }
+            input_ = input;
         }
         public static void provide(ITextureManager texture)
         {
@@ -49,6 +37,14 @@ namespace ShipPrototype
         public static void provide(Random random)
         {
             random_ = random;
+        }
+        public static void provide(ControlManager control)
+        {
+            control_ = control;
+        }
+        public static void provide(Ship ship)
+        {
+            ship_ = ship;
         }
 
         public static IScreenPrinter getScreenPrinter()
@@ -70,6 +66,14 @@ namespace ShipPrototype
         public static Random getRandom()
         {
             return random_;
+        }
+        public static ControlManager getControlManager()
+        {
+            return control_;
+        }
+        public static Ship getShip()
+        {
+            return ship_;
         }
     }
 }

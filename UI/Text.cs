@@ -11,9 +11,16 @@ namespace ShipPrototype.UI
     {
         String text_;
 
+        public Text(String text, Vector2 padding)
+        {
+            text_ = text;
+            padding_ = padding;
+            size_ = Locator.getScreenPrinter().measureString(text);
+        }
+
         public override void render(SpriteBatch spriteBatch)
         {
-            Locator.getScreenPrinter().print(spriteBatch, loc_, text_, Color.White, 1);
+            Locator.getScreenPrinter().print(spriteBatch, loc, text_, Color.White, 1);
         }
     }
 }

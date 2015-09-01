@@ -10,5 +10,7 @@ namespace ShipPrototype.Interfaces
     interface IScreenPrinter
     {
         void print(SpriteBatch spriteBatch, Vector2 pos, String text, Color color, float scale);
+
+        Vector2 measureString(String str);
     }
 }

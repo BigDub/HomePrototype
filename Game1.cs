@@ -25,15 +25,16 @@ namespace ShipPrototype
         GameEntity player;
         GameEntity world;
         GameEntity test;
+        Point screen;
 
-        Ship ship;
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
             this.IsMouseVisible = true;
-            graphics.PreferredBackBufferWidth = 800;
-            graphics.PreferredBackBufferHeight = 600;
+            screen = new Point(800, 600);
+            graphics.PreferredBackBufferWidth = screen.X;
+            graphics.PreferredBackBufferHeight = screen.Y;
         }
 
         /// <summary>
@@ -48,6 +49,9 @@ namespace ShipPrototype
             Locator.provide(InputHandler.init());
             Locator.provide(ComponentManager.init());
             Locator.provide(new Random());
+            Locator.provide(new ControlManager());
+            Locator.getInputHandler().addKeyReleaseObserver(Locator.getControlManager().keyRelease);
+            Locator.getInputHandler().addMouseReleaseObserver(Locator.getControlManager().mouseUp);
 
             base.Initialize();
         }
@@ -68,17 +72,17 @@ namespace ShipPrototype
             world.spatial = new SpatialComponent(world, new Vector2(400, 300), 0, Vector2.One);
             Ship.loadTextures();
 
-            ship = new Ship(world);
+            Locator.provide(Ship.init(world));
+            Locator.getControlManager().forceState(new ControlStates.Selector());
 
             player = new GameEntity();
-            player.spatial = new Components.SpatialComponent(player, ship.entity_.spatial, Vector2.Zero, 0, Vector2.One);
+            player.spatial = new Components.SpatialComponent(player, Locator.getShip().entity_.spatial, Vector2.Zero, 0, Vector2.One);
             player.render = new Components.RenderComponent(player, Locator.getTextureManager().loadTexture("person32"), 1, new Vector2(16), Color.White);
-            player.physic = new Components.PhysicsComponent(player, Vector2.Zero, 0.2f, Vector2.Zero);
             player.controller = new Components.ControllerComponent(player);
             Locator.getComponentManager().addEntity(player);
 
             test = new GameEntity();
-            test.spatial = new SpatialComponent(test, ship.entity_.spatial, Vector2.Zero, 0, new Vector2(3));
+            test.spatial = new SpatialComponent(test, Locator.getShip().entity_.spatial, Vector2.Zero, 0, new Vector2(3));
             test.render = new RenderComponent(test, -1, 0, new Vector2(0.5f), Color.White);
             Locator.getComponentManager().addEntity(test);
         }
@@ -103,10 +107,13 @@ namespace ShipPrototype
 
             Locator.getInputHandler().update(elapsed);
             Locator.getComponentManager().update(elapsed);
+            Locator.getControlManager().update(elapsed);
+
+            world.spatial.translation_ = new Vector2((screen.X / 2) - player.spatial.translation_.X, (screen.Y / 2) - player.spatial.translation_.Y);
 
             MouseState ms = Mouse.GetState();
             Vector2 mous = new Vector2(ms.X, ms.Y);
-            Vector2 spot = ship.entity_.spatial.worldToLocal(mous);
+            Vector2 spot = Locator.getShip().entity_.spatial.worldToLocal(mous);
             test.spatial.translation_ = spot;
             
             // TODO: Add your update logic here
@@ -123,6 +130,7 @@ namespace ShipPrototype
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
             Locator.getComponentManager().render(spriteBatch);
+            Locator.getControlManager().render(spriteBatch);
 
             base.Draw(gameTime);
         }

@@ -9,7 +9,7 @@ namespace ShipPrototype.Components
 {
     class ControllerComponent
     {
-        private static float speed = 100;
+        private static float speed = 200;
         GameEntity entity_;
 
         ControllerComponent parent_;

@@ -30,5 +30,10 @@ namespace ShipPrototype.Services
         {
             spriteBatch.DrawString(spriteFont_, text, pos, color, 0, Vector2.Zero, scale, SpriteEffects.None, 0);
         }
+
+        public Vector2 measureString(String str)
+        {
+            return spriteFont_.MeasureString(str);
+        }
     }
 }

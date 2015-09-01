@@ -1,8 +1,8 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Diagnostics;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
@@ -19,40 +19,35 @@ namespace ShipPrototype
             tile_tex_id = Locator.getTextureManager().loadTexture("tile32");
         }
 
-        private bool[,] tiles_;
-
         public GameEntity entity_;
+        public Components.TileSystemComponent tiles;
 
-        public Ship(GameEntity world)
+        private static Ship ship;
+        public static Ship init(GameEntity world)
         {
-            tiles_ = new bool[width_, height_];
-            entity_ = new GameEntity();
-            entity_.spatial = new Components.SpatialComponent(entity_, world.spatial);
-            //entity_.spatial = new Components.SpatialComponent(entity_, new Vector2(-width_ / 2, -height_ / 2), 0, Vector2.One);
-            //entity_.physic = new Components.PhysicsComponent(entity_, Vector2.Zero, 0f, Vector2.Zero);
-            entity_.physic = new Components.DriftPhysics(entity_, new Vector2(100), new Vector2(1), 0.1f);
-            //entity_.physic = new Components.PhysicsComponent(entity_, new Vector2(1, 1), 0.1f, new Vector2(-0.01f));
+            Debug.Assert(ship == null);
 
-            Locator.getComponentManager().addEntity(entity_);
-            for (int x = -width_ / 2; x < width_ / 2; ++x)
-            {
-                for (int y = -height_ / 2; y < height_; ++y)
-                {
-                    GameEntity tile = new GameEntity();
-                    tile.spatial = new Components.SpatialComponent(tile, entity_.spatial, new Vector2(x * 32, y * 32), 0, Vector2.One);
-                    tile.render = new Components.RenderComponent(tile, tile_tex_id, 1, new Vector2(16), Color.White);
-                    Locator.getComponentManager().addEntity(tile);
-                }
-            }
+            ship = new Ship(world);
+            return ship;
         }
 
-        public bool isTileOpen(int x, int y)
+        private Ship(GameEntity world)
         {
-            if (x >= 0 && x < width_ && y >= 0 && y < height_)
-            {
-                return tiles_[x, y];
-            }
-            return false;
+            entity_ = new GameEntity();
+            entity_.spatial = new Components.SpatialComponent(entity_, world.spatial);
+
+            Locator.getComponentManager().addEntity(entity_);
+
+            tiles = new Components.TileSystemComponent();
+            tiles.addArea(new Point(16, 8), Point.Zero);
+            tiles.addArea(new Point(16, 8), new Point(0, 10));
+            tiles.addArea(new Point(16, 8), new Point(0, 20));
+            tiles.addArea(new Point(6, 28), new Point(16, 0));
+            tiles.addArea(new Point(10, 16), new Point(22, 6));
+            tiles.addArea(new Point(10, 8), new Point(32, 10));
+            tiles.addArea(new Point(6, 16), new Point(42, 6));
+
+            tiles.generateTileEntities(entity_);
         }
     }
 }

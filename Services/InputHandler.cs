@@ -72,104 +72,28 @@ namespace ShipPrototype.Services
             pks_ = ks_;
             ks_ = Keyboard.GetState();
 
+            var values = Enum.GetValues(typeof(Keys));
+
             bool shift = ks_.IsKeyDown(Keys.LeftShift) || ks_.IsKeyDown(Keys.RightShift);
             bool ctrl = ks_.IsKeyDown(Keys.LeftControl) || ks_.IsKeyDown(Keys.RightControl);
-            #region W
-            if (pks_.IsKeyUp(Keys.W) && ks_.IsKeyDown(Keys.W))
+            foreach (var value in values)
             {
-                if (keyPress != null)
-                keyPress(this, new KeyboardEventArgs(Keys.W, shift, ctrl));
+                Keys key = (Keys)Enum.ToObject(typeof(Keys), value);
+                if (pks_.IsKeyUp(key) && ks_.IsKeyDown(key))
+                {
+                    if (keyPress != null)
+                    {
+                        keyPress(this, new KeyboardEventArgs(key, shift, ctrl));
+                    }
+                }
+                if (pks_.IsKeyDown(key) && ks_.IsKeyUp(key))
+                {
+                    if (keyRelease != null)
+                    {
+                        keyRelease(this, new KeyboardEventArgs(key, shift, ctrl));
+                    }
+                }
             }
-            if (pks_.IsKeyDown(Keys.W) && ks_.IsKeyUp(Keys.W))
-            {
-                if (keyRelease != null)
-                keyRelease(this, new KeyboardEventArgs(Keys.W, shift, ctrl));
-            }
-            #endregion
-            #region A
-            if (pks_.IsKeyUp(Keys.A) && ks_.IsKeyDown(Keys.A))
-            {
-                if (keyPress != null)
-                keyPress(this, new KeyboardEventArgs(Keys.A, shift, ctrl));
-            }
-            if (pks_.IsKeyDown(Keys.A) && ks_.IsKeyUp(Keys.A))
-            {
-                if (keyRelease != null)
-                keyRelease(this, new KeyboardEventArgs(Keys.A, shift, ctrl));
-            }
-            #endregion
-            #region S
-            if (pks_.IsKeyUp(Keys.S) && ks_.IsKeyDown(Keys.S))
-            {
-                if (keyPress != null)
-                keyPress(this, new KeyboardEventArgs(Keys.S, shift, ctrl));
-            }
-            if (pks_.IsKeyDown(Keys.S) && ks_.IsKeyUp(Keys.S))
-            {
-                if (keyRelease != null)
-                keyRelease(this, new KeyboardEventArgs(Keys.S, shift, ctrl));
-            }
-            #endregion
-            #region D
-            if (pks_.IsKeyUp(Keys.D) && ks_.IsKeyDown(Keys.D))
-            {
-                if (keyPress != null)
-                keyPress(this, new KeyboardEventArgs(Keys.D, shift, ctrl));
-            }
-            if (pks_.IsKeyDown(Keys.D) && ks_.IsKeyUp(Keys.D))
-            {
-                if (keyRelease != null)
-                keyRelease(this, new KeyboardEventArgs(Keys.D, shift, ctrl));
-            }
-            #endregion
-            #region SPACE
-            if (pks_.IsKeyUp(Keys.Space) && ks_.IsKeyDown(Keys.Space))
-            {
-                if (keyPress != null)
-                keyPress(this, new KeyboardEventArgs(Keys.Space, shift, ctrl));
-            }
-            if (pks_.IsKeyDown(Keys.Space) && ks_.IsKeyUp(Keys.Space))
-            {
-                if (keyRelease != null)
-                keyRelease(this, new KeyboardEventArgs(Keys.Space, shift, ctrl));
-            }
-            #endregion
-            #region ENTER
-            if (pks_.IsKeyUp(Keys.Enter) && ks_.IsKeyDown(Keys.Enter))
-            {
-                if (keyPress != null)
-                keyPress(this, new KeyboardEventArgs(Keys.Enter, shift, ctrl));
-            }
-            if (pks_.IsKeyDown(Keys.Enter) && ks_.IsKeyUp(Keys.Enter))
-            {
-                if (keyRelease != null)
-                keyRelease(this, new KeyboardEventArgs(Keys.Enter, shift, ctrl));
-            }
-            #endregion
-            #region ESCAPE
-            if (pks_.IsKeyUp(Keys.Escape) && ks_.IsKeyDown(Keys.Escape))
-            {
-                if (keyPress != null)
-                keyPress(this, new KeyboardEventArgs(Keys.Escape, shift, ctrl));
-            }
-            if (pks_.IsKeyDown(Keys.Escape) && ks_.IsKeyUp(Keys.Escape))
-            {
-                if (keyRelease != null)
-                keyRelease(this, new KeyboardEventArgs(Keys.Escape, shift, ctrl));
-            }
-            #endregion
-            #region SHIFT
-            if ((pks_.IsKeyUp(Keys.LeftShift) && pks_.IsKeyUp(Keys.RightShift)) && shift)
-            {
-                if (keyPress != null)
-                keyPress(this, new KeyboardEventArgs(Keys.LeftShift, shift, ctrl));
-            }
-            if ((pks_.IsKeyDown(Keys.LeftShift) || pks_.IsKeyDown(Keys.RightShift)) && !shift)
-            {
-                if (keyRelease != null)
-                keyRelease(this, new KeyboardEventArgs(Keys.LeftShift, shift, ctrl));
-            }
-            #endregion
             #endregion
         }
 
