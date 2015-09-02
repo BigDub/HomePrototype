@@ -17,6 +17,7 @@ namespace ShipPrototype.Components
 {
     class TileSystemComponent
     {
+        private static float tileSize = 32;
         List<TileArea> areas_;
 
         public TileSystemComponent()
@@ -72,7 +73,7 @@ namespace ShipPrototype.Components
             {
                 for (int y = 0; y < size.Y; ++y)
                 {
-                    Point temp = new Point(x, y);
+                    Point temp = new Point(point.X + x, point.Y + y);
                     if (getTile(temp) != TileStatus.OPEN)
                         return false;
                 }
@@ -85,7 +86,7 @@ namespace ShipPrototype.Components
             {
                 for (int y = 0; y < size.Y; ++y)
                 {
-                    Point temp = new Point(x, y);
+                    Point temp = new Point(point.X + x, point.Y + y);
                     setTile(temp, TileStatus.FILLED);
                 }
             }
@@ -96,10 +97,15 @@ namespace ShipPrototype.Components
             {
                 for (int y = 0; y < size.Y; ++y)
                 {
-                    Point temp = new Point(x, y);
+                    Point temp = new Point(point.X + x, point.Y + y);
                     setTile(temp, TileStatus.OPEN);
                 }
             }
+        }
+
+        public Vector2 getWorld(Point point)
+        {
+            return new Vector2(point.X * tileSize, point.Y * tileSize);
         }
 
         public void generateTileEntities(GameEntity parent)

@@ -30,7 +30,7 @@ namespace ShipPrototype.UI
 
         public override void click(Vector2 pos)
         {
-            //TODO send message to some controlling entity
+            Locator.getControlManager().sendMessage(message_);
         }
 
         public override void render(SpriteBatch spriteBatch)

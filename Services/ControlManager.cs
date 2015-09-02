@@ -12,7 +12,9 @@ namespace ShipPrototype
 {
     enum GUIMessage
     {
-        BUTTON_PRESS
+        BUTTON_PRESS,
+        NEW_CANNON,
+        NEW_TRACTOR
     };
 }
 
@@ -76,26 +78,9 @@ namespace ShipPrototype.Services
                     return;
                 }
             }
-            switch (e.button_)
+            if (state != null)
             {
-                case MouseButton.LEFT:
-
-                    break;
-                case MouseButton.RIGHT:
-                    foreach (UI.Window window in windows)
-                    {
-                        if (window.isWithin(m_pos))
-                        {
-                            windows.Remove(window);
-                            return;
-                        }
-                    }
-                    //TODO: If no windows captured the event, send it to the game.
-                    if (state != null)
-                    {
-                        state.mouseUp(sender, e);
-                    }
-                    break;
+                state.mouseUp(sender, e);
             }
         }
 
@@ -105,7 +90,7 @@ namespace ShipPrototype.Services
             {
                 if (inventory == null)
                 {
-                    inventory = WindowFactory.inventoryWindow();
+                    inventory = Locator.getWindowFactory().inventoryWindow();
                     windows.Insert(0, inventory);
                 }
             }
@@ -119,6 +104,20 @@ namespace ShipPrototype.Services
                 window.render(spriteBatch);
             }
             spriteBatch.End();
+        }
+
+        public void sendMessage(GUIMessage message)
+        {
+            switch (message)
+            {
+                case GUIMessage.NEW_CANNON:
+                    state.changeState(new ControlStates.Placer(Locator.getObjectFactory().createGun()));
+                    break;
+
+                case GUIMessage.NEW_TRACTOR:
+                    state.changeState(new ControlStates.Placer(Locator.getObjectFactory().createTractor()));
+                    break;
+            }
         }
     }
 }

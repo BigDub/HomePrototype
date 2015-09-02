@@ -26,13 +26,14 @@ namespace ShipPrototype
         GameEntity world;
         GameEntity test;
         Point screen;
+        int bg_tex_id;
 
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
             this.IsMouseVisible = true;
-            screen = new Point(800, 600);
+            screen = new Point(1280, 800);
             graphics.PreferredBackBufferWidth = screen.X;
             graphics.PreferredBackBufferHeight = screen.Y;
         }
@@ -52,6 +53,11 @@ namespace ShipPrototype
             Locator.provide(new ControlManager());
             Locator.getInputHandler().addKeyReleaseObserver(Locator.getControlManager().keyRelease);
             Locator.getInputHandler().addMouseReleaseObserver(Locator.getControlManager().mouseUp);
+            ControlStates.BaseState.setParent(Locator.getControlManager());
+            ObjectFactory ob = new ObjectFactory();
+            ob.init();
+            Locator.provide(ob);
+            Locator.provide(new WindowFactory(screen));
 
             base.Initialize();
         }
@@ -67,12 +73,15 @@ namespace ShipPrototype
 
             Locator.provide(ScreenPrinter.init(Content.Load<SpriteFont>("SpriteFont1")));
             Locator.provide(TextureManager.init(GraphicsDevice, Content));
+            bg_tex_id = Locator.getTextureManager().loadTexture("spacebg");
 
             world = new GameEntity();
             world.spatial = new SpatialComponent(world, new Vector2(400, 300), 0, Vector2.One);
+            Locator.provideWorld(world);
             Ship.loadTextures();
 
             Locator.provide(Ship.init(world));
+            Ship.populate();
             Locator.getControlManager().forceState(new ControlStates.Selector());
 
             player = new GameEntity();
@@ -128,6 +137,10 @@ namespace ShipPrototype
         protected override void Draw(GameTime gameTime)
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
+
+            spriteBatch.Begin();
+            spriteBatch.Draw(Locator.getTextureManager().getTexture(bg_tex_id), Vector2.Zero, Color.White);
+            spriteBatch.End();
 
             Locator.getComponentManager().render(spriteBatch);
             Locator.getControlManager().render(spriteBatch);

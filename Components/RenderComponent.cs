@@ -17,7 +17,7 @@ namespace ShipPrototype.Components
         private int texture_id_;
         private int layer_;
         private Vector2 origin_;
-        private Color color_;
+        public Color color_;
 
         private RenderComponent(GameEntity entity)
         {

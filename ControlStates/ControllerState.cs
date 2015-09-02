@@ -10,10 +10,6 @@ namespace ShipPrototype.ControlStates
 {
     interface ControllerState
     {
-        void setParent(ControlManager manager);
-
-        void reset();
-
         void changeState(ControllerState newState);
 
         void update(float elapsed);

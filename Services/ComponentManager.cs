@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Diagnostics;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
 using ShipPrototype.Components;
@@ -25,66 +26,83 @@ namespace ShipPrototype.Services
         private List<RenderComponent> renders_;
         private List<SpatialComponent> spatials_;
         private List<ControllerComponent> controllers_;
+        private List<TileCoord> tiles_;
+        private List<InfoComponent> info_;
+
         private ComponentManager()
         {
             physics_ = new List<PhysicsComponent>();
             renders_ = new List<RenderComponent>();
             spatials_ = new List<SpatialComponent>();
             controllers_ = new List<ControllerComponent>();
+            tiles_ = new List<TileCoord>();
+            info_ = new List<InfoComponent>();
         }
 
-        private void addPhysic(PhysicsComponent physic)
+        private void add(PhysicsComponent physic)
         {
             physics_.Add(physic);
         }
-        private void addRender(RenderComponent render)
+        private void add(RenderComponent render)
         {
             renders_.Add(render);
         }
-        private void addSpatial(SpatialComponent spatial)
+        private void add(SpatialComponent spatial)
         {
             spatials_.Add(spatial);
         }
-        private void addController(ControllerComponent controller)
+        private void add(ControllerComponent controller)
         {
             controllers_.Add(controller);
             Locator.getInputHandler().addKeyPressObserver(controller.KeyPressed);
             Locator.getInputHandler().addKeyReleaseObserver(controller.KeyReleased);
         }
+        private void add(TileCoord tile)
+        {
+            tiles_.Add(tile);
+        }
+        private void add(InfoComponent info)
+        {
+            info_.Add(info);
+        }
 
         public void addEntity(GameEntity entity)
         {
             if (entity.physic != null)
-            {
-                addPhysic(entity.physic);
-            }
+                add(entity.physic);
             if (entity.render != null)
-            {
-                addRender(entity.render);
-            }
+                add(entity.render);
             if (entity.spatial != null)
-            {
-                addSpatial(entity.spatial);
-            }
+                add(entity.spatial);
             if (entity.controller != null)
-            {
-                addController(entity.controller);
-            }
+                add(entity.controller);
+            if (entity.tile != null)
+                add(entity.tile);
+            if (entity.info != null)
+                add(entity.info);
         }
 
-        private void removePhysic(PhysicsComponent physic)
+        private void remove(InfoComponent info)
+        {
+            info_.Remove(info);
+        }
+        private void remove(TileCoord tile)
+        {
+            tiles_.Remove(tile);
+        }
+        private void remove(PhysicsComponent physic)
         {
             physics_.Remove(physic);
         }
-        private void removeRender(RenderComponent render)
+        private void remove(RenderComponent render)
         {
             renders_.Remove(render);
         }
-        private void removeSpatial(SpatialComponent spatial)
+        private void remove(SpatialComponent spatial)
         {
             spatials_.Remove(spatial);
         }
-        private void removeController(ControllerComponent controller)
+        private void remove(ControllerComponent controller)
         {
             controllers_.Remove(controller);
             Locator.getInputHandler().removeKeyPressObserver(controller.KeyPressed);
@@ -94,21 +112,32 @@ namespace ShipPrototype.Services
         public void removeEntity(GameEntity entity)
         {
             if (entity.physic != null)
-            {
-                removePhysic(entity.physic);
-            }
+                remove(entity.physic);
             if (entity.render != null)
-            {
-                removeRender(entity.render);
-            }
+                remove(entity.render);
             if (entity.spatial != null)
-            {
-                removeSpatial(entity.spatial);
-            }
+                remove(entity.spatial);
             if (entity.controller != null)
+                remove(entity.controller);
+            if (entity.tile != null)
+                remove(entity.tile);
+            if (entity.info != null)
+                remove(entity.info);
+        }
+
+        public GameEntity pick(TileSystemComponent tsc, Point point)
+        {
+            foreach (TileCoord tile in tiles_)
             {
-                removeController(entity.controller);
+                if (tile.tileSystem_ == tsc)
+                {
+                    if (tile.isWithin(point))
+                    {
+                        return tile.entity_;
+                    }
+                }
             }
+            return null;
         }
 
         public void update(float elapsed)

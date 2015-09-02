@@ -28,7 +28,31 @@ namespace ShipPrototype
             Debug.Assert(ship == null);
 
             ship = new Ship(world);
+
             return ship;
+        }
+
+        public static void populate()
+        {
+            GameEntity gun = Locator.getObjectFactory().createGun();
+            gun.tile.coord_ = new Point(44, 8);
+            ship.tiles.build(gun.tile.coord_, gun.tile.size_);
+            Locator.getComponentManager().addEntity(gun);
+
+            gun = Locator.getObjectFactory().createGun();
+            gun.tile.coord_ = new Point(44, 18);
+            ship.tiles.build(gun.tile.coord_, gun.tile.size_);
+            Locator.getComponentManager().addEntity(gun);
+
+            gun = Locator.getObjectFactory().createGun();
+            gun.tile.coord_ = new Point(44, 13);
+            ship.tiles.build(gun.tile.coord_, gun.tile.size_);
+            Locator.getComponentManager().addEntity(gun);
+
+            gun = Locator.getObjectFactory().createTractor();
+            gun.tile.coord_ = new Point(26, 6);
+            ship.tiles.build(gun.tile.coord_, gun.tile.size_);
+            Locator.getComponentManager().addEntity(gun);
         }
 
         private Ship(GameEntity world)

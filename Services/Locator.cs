@@ -17,6 +17,9 @@ namespace ShipPrototype
         private static Random random_;
         private static ControlManager control_;
         private static Ship ship_;
+        private static ObjectFactory factory_;
+        private static WindowFactory window_;
+        private static GameEntity world_;
 
         public static void provide(IScreenPrinter printer)
         {
@@ -46,6 +49,18 @@ namespace ShipPrototype
         {
             ship_ = ship;
         }
+        public static void provide(ObjectFactory factory)
+        {
+            factory_ = factory;
+        }
+        public static void provide(WindowFactory window)
+        {
+            window_ = window;
+        }
+        public static void provideWorld(GameEntity world)
+        {
+            world_ = world;
+        }
 
         public static IScreenPrinter getScreenPrinter()
         {
@@ -74,6 +89,18 @@ namespace ShipPrototype
         public static Ship getShip()
         {
             return ship_;
+        }
+        public static ObjectFactory getObjectFactory()
+        {
+            return factory_;
+        }
+        public static WindowFactory getWindowFactory()
+        {
+            return window_;
+        }
+        public static GameEntity getWorld()
+        {
+            return world_;
         }
     }
 }

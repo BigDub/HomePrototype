@@ -12,5 +12,7 @@ namespace ShipPrototype
         public SpatialComponent spatial { get; set; }
         public PhysicsComponent physic { get; set; }
         public ControllerComponent controller { get; set; }
+        public TileCoord tile { get; set; }
+        public InfoComponent info { get; set; }
     }
 }

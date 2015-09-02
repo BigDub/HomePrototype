@@ -14,7 +14,7 @@ namespace ShipPrototype.UI
         public Vector2 loc_;
         protected Vector2 size_;
         //Left, top, right, bottom
-        public Vector2 padding_;
+        public Vector2 padding_, minimum_;
         public bool center = true;
 
         public Vector2 loc
@@ -35,7 +35,7 @@ namespace ShipPrototype.UI
         {
             get
             {
-                return new Vector2(size_.X + 2 * padding_.X, size_.Y + 2 * padding_.Y);
+                return new Vector2(MathHelper.Max(minimum_.X, size_.X + 2 * padding_.X), MathHelper.Max(minimum_.Y, size_.Y + 2 * padding_.Y));
             }
         }
         public bool isWithin(Vector2 point)

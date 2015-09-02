@@ -25,6 +25,8 @@ namespace ShipPrototype.UI
             pos -= loc_;
             foreach (UIComponent child in children_)
             {
+                if (child == null)
+                    continue;
                 if (child.isWithin(pos))
                 {
                     child.click(pos);
@@ -58,16 +60,19 @@ namespace ShipPrototype.UI
                 cursor.X = padding_.X;
                 for (int col = 0; col < columns_; ++col)
                 {
-                    children_[row, col].loc_ = cursor;
-                    bool center = children_[row, col].center;
-                    Vector2 size = children_[row, col].size;
-                    if (center && columnWidths[col] > size.X)
+                    if (children_[row, col] != null)
                     {
-                         children_[row, col].loc_.X += (columnWidths[col] - size.X) / 2.0f;
-                    }
-                    if (center && rowHeights[row] > size.Y)
-                    {
-                        children_[row, col].loc_.Y += (rowHeights[row] - size.Y) / 2.0f;
+                        children_[row, col].loc_ = cursor;
+                        bool center = children_[row, col].center;
+                        Vector2 size = children_[row, col].size;
+                        if (center && columnWidths[col] > size.X)
+                        {
+                            children_[row, col].loc_.X += (columnWidths[col] - size.X) / 2.0f;
+                        }
+                        if (center && rowHeights[row] > size.Y)
+                        {
+                            children_[row, col].loc_.Y += (rowHeights[row] - size.Y) / 2.0f;
+                        }
                     }
                     cursor.X += columnWidths[col];
                 }
@@ -85,9 +90,15 @@ namespace ShipPrototype.UI
 
         public override void update(float elapsed)
         {
-            foreach (UIComponent child in children_)
+            for (int row = 0; row < rows_; ++row)
             {
-                child.update(elapsed);
+                for (int col = 0; col < columns_; ++col)
+                {
+                    if (children_[row, col] != null)
+                    {
+                        children_[row, col].update(elapsed);
+                    }
+                }
             }
         }
 
@@ -103,7 +114,10 @@ namespace ShipPrototype.UI
             {
                 for (int col = 0; col < columns_; ++col)
                 {
-                    children_[row, col].render(spriteBatch);
+                    if (children_[row, col] != null)
+                    {
+                        children_[row, col].render(spriteBatch);
+                    }
                 }
             }
  	    }
