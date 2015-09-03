@@ -23,11 +23,11 @@ namespace ShipPrototype.UI
             {
                 if (parent_ != null)
                 {
-                    return parent_.loc + loc_ + padding_;
+                    return parent_.loc + parent_.padding_ + loc_;
                 }
                 else
                 {
-                    return loc_ + padding_;
+                    return loc_;
                 }
             }
         }

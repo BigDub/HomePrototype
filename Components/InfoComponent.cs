@@ -10,25 +10,36 @@ namespace ShipPrototype.Components
         SHOOTABLE,
         LOOTABLE,
         SHIPBOARD,
+        ITEM,
         OTHER,
         INHERIT
     };
+
+    enum ObjectState
+    {
+        OK,
+        DISABLED,
+        DAMAGED
+    };
+
     class InfoComponent
     {
+        private static int inv_size = 5;
         public GameEntity entity_;
 
         public InfoComponent()
         {
+            inventory = new GameEntity[inv_size];
             entity_ = null;
             cusName_ = false;
-            type_ = ObjectType.OTHER;
+            type_ = ObjectType.SHIPBOARD;
         }
 
         public InfoComponent(GameEntity entity)
         {
             entity_ = entity;
             cusName_ = false;
-            type_ = ObjectType.OTHER;
+            type_ = ObjectType.SHIPBOARD;
         }
         public InfoComponent(GameEntity entity, InfoComponent parent)
         {
@@ -75,5 +86,21 @@ namespace ShipPrototype.Components
                 type_ = value;
             }
         }
+
+        private ObjectState state_;
+        public ObjectState state
+        {
+            get
+            {
+                return state_;
+            }
+            set
+            {
+                state_ = value;
+                entity_.render.setState(state_);
+            }
+        }
+
+        public GameEntity[] inventory;
     }
 }

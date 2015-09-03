@@ -45,10 +45,36 @@ namespace ShipPrototype.Components
 
         public void render(SpriteBatch spriteBatch)
         {
-            if (texture_id_ >= -1)
+            if (texture_id_ >= -1 && entity_.spatial != null)
             {
                 SpatialComponent spatial = entity_.spatial;
-                spriteBatch.Draw(Locator.getTextureManager().getTexture(texture_id_), new Vector2(spatial.w_translation.X, spatial.w_translation.Y), null, color_, spatial.w_rotation, origin_, spatial.w_scale, SpriteEffects.None, layer_);
+                spriteBatch.Draw(
+                    Locator.getTextureManager().getTexture(texture_id_),
+                    new Vector2(spatial.w_translation.X, spatial.w_translation.Y),
+                    null,
+                    color_,
+                    spatial.w_rotation,
+                    origin_,
+                    spatial.w_scale,
+                    SpriteEffects.None,
+                    layer_
+                );
+            }
+        }
+
+        public void setState(ObjectState state)
+        {
+            switch (state)
+            {
+                case ObjectState.OK:
+                    color_ = Color.White;
+                    break;
+                case ObjectState.DISABLED:
+                    color_ = Color.Yellow;
+                    break;
+                case ObjectState.DAMAGED:
+                    color_ = Color.Red;
+                    break;
             }
         }
     }

@@ -57,7 +57,8 @@ namespace ShipPrototype
             ObjectFactory ob = new ObjectFactory();
             ob.init();
             Locator.provide(ob);
-            Locator.provide(new WindowFactory(screen));
+
+            Locator.provide(MessageBoard.init());
 
             base.Initialize();
         }
@@ -71,29 +72,36 @@ namespace ShipPrototype
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
-            Locator.provide(ScreenPrinter.init(Content.Load<SpriteFont>("SpriteFont1")));
+            Locator.provide(ScreenPrinter.init(Content.Load<SpriteFont>("LargeFont"), Content.Load<SpriteFont>("SmallFont")));
             Locator.provide(TextureManager.init(GraphicsDevice, Content));
             bg_tex_id = Locator.getTextureManager().loadTexture("spacebg");
 
             world = new GameEntity();
             world.spatial = new SpatialComponent(world, new Vector2(400, 300), 0, Vector2.One);
+            world.controller = new WorldController(world, screen);
+            Locator.getComponentManager().addEntity(world);
             Locator.provideWorld(world);
             Ship.loadTextures();
 
             Locator.provide(Ship.init(world));
-            Ship.populate();
+            Locator.getShip().populate();
             Locator.getControlManager().forceState(new ControlStates.Selector());
 
             player = new GameEntity();
-            player.spatial = new Components.SpatialComponent(player, Locator.getShip().entity_.spatial, Vector2.Zero, 0, Vector2.One);
+            player.spatial = new Components.SpatialComponent(player, Locator.getShip().entity_.spatial, new Vector2(900, 416), 0, Vector2.One);
             player.render = new Components.RenderComponent(player, Locator.getTextureManager().loadTexture("person32"), 1, new Vector2(16), Color.White);
-            player.controller = new Components.ControllerComponent(player);
+            player.controller = new Components.PlayerControllerComponent(player);
             Locator.getComponentManager().addEntity(player);
+            Locator.providePlayer(player);
 
             test = new GameEntity();
             test.spatial = new SpatialComponent(test, Locator.getShip().entity_.spatial, Vector2.Zero, 0, new Vector2(3));
             test.render = new RenderComponent(test, -1, 0, new Vector2(0.5f), Color.White);
             Locator.getComponentManager().addEntity(test);
+
+
+            Locator.provide(new WindowFactory(screen));
+            Locator.getControlManager().setInventory(Locator.getWindowFactory().inventoryWindow());
         }
 
         /// <summary>
@@ -118,7 +126,7 @@ namespace ShipPrototype
             Locator.getComponentManager().update(elapsed);
             Locator.getControlManager().update(elapsed);
 
-            world.spatial.translation_ = new Vector2((screen.X / 2) - player.spatial.translation_.X, (screen.Y / 2) - player.spatial.translation_.Y);
+            //world.spatial.translation_ = new Vector2((screen.X / 2) - player.spatial.translation_.X, (screen.Y / 2) - player.spatial.translation_.Y);
 
             MouseState ms = Mouse.GetState();
             Vector2 mous = new Vector2(ms.X, ms.Y);

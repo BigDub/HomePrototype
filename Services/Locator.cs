@@ -3,37 +3,38 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-using ShipPrototype.Interfaces;
 using ShipPrototype.Services;
 
 namespace ShipPrototype
 {
     class Locator
     {
-        private static IScreenPrinter printer_;
-        private static IInputHandler input_;
-        private static ITextureManager texture_;
-        private static IComponentManager component_;
+        private static ScreenPrinter printer_;
+        private static InputHandler input_;
+        private static TextureManager texture_;
+        private static ComponentManager component_;
         private static Random random_;
         private static ControlManager control_;
         private static Ship ship_;
         private static ObjectFactory factory_;
         private static WindowFactory window_;
         private static GameEntity world_;
+        private static GameEntity player_;
+        private static MessageBoard mboard_;
 
-        public static void provide(IScreenPrinter printer)
+        public static void provide(ScreenPrinter printer)
         {
             printer_ = printer;
         }
-        public static void provide(IInputHandler input)
+        public static void provide(InputHandler input)
         {
             input_ = input;
         }
-        public static void provide(ITextureManager texture)
+        public static void provide(TextureManager texture)
         {
             texture_ = texture;
         }
-        public static void provide(IComponentManager component)
+        public static void provide(ComponentManager component)
         {
             component_ = component;
         }
@@ -61,20 +62,28 @@ namespace ShipPrototype
         {
             world_ = world;
         }
+        public static void providePlayer(GameEntity player)
+        {
+            player_ = player;
+        }
+        public static void provide(MessageBoard mb)
+        {
+            mboard_ = mb;
+        }
 
-        public static IScreenPrinter getScreenPrinter()
+        public static ScreenPrinter getScreenPrinter()
         {
             return printer_;
         }
-        public static IInputHandler getInputHandler()
+        public static InputHandler getInputHandler()
         {
             return input_;
         }
-        public static ITextureManager getTextureManager()
+        public static TextureManager getTextureManager()
         {
             return texture_;
         }
-        public static IComponentManager getComponentManager()
+        public static ComponentManager getComponentManager()
         {
             return component_;
         }
@@ -101,6 +110,14 @@ namespace ShipPrototype
         public static GameEntity getWorld()
         {
             return world_;
+        }
+        public static GameEntity getPlayer()
+        {
+            return player_;
+        }
+        public static MessageBoard getMessageBoard()
+        {
+            return mboard_;
         }
     }
 }

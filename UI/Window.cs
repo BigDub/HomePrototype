@@ -9,16 +9,17 @@ namespace ShipPrototype.UI
 {
     class Window : FrameComponent
     {
-        private static Color windowColor = new Color(100, 100, 100, 200);
+        public Color color_;
 
-        public Window(Vector2 padding, int rows, int columns) : base(rows, columns)
+        public Window(int rows, int columns) : base(rows, columns)
         {
-            padding_ = padding;
+            color_ = new Color(100, 100, 100, 200);
+            padding_ = Vector2.Zero;
         }
 
         public override void render(SpriteBatch spriteBatch)
         {
-            spriteBatch.Draw(Locator.getTextureManager().getTexture(-1), new Rectangle((int)loc_.X, (int)loc_.Y, (int)size.X, (int)size.Y), null, windowColor, 0, Vector2.Zero, SpriteEffects.None, 1);
+            spriteBatch.Draw(Locator.getTextureManager().getTexture(-1), new Rectangle((int)loc.X, (int)loc.Y, (int)size.X, (int)size.Y), null, color_, 0, Vector2.Zero, SpriteEffects.None, 1);
             base.render(spriteBatch);
         }
     }

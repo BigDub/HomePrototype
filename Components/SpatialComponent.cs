@@ -11,12 +11,10 @@ namespace ShipPrototype.Components
         GameEntity entity_;
 
         SpatialComponent parent_;
-        List<SpatialComponent> children_;
 
         private SpatialComponent(GameEntity entity)
         {
             entity_ = entity;
-            children_ = new List<SpatialComponent>();
         }
 
         public SpatialComponent(GameEntity entity, Vector2 translation, float rotation, Vector2 scale) : this(entity)
@@ -29,7 +27,6 @@ namespace ShipPrototype.Components
         public SpatialComponent(GameEntity entity, SpatialComponent parent, Vector2 translation, float rotation, Vector2 scale) : this(entity)
         {
             parent_ = parent;
-            parent_.children_.Add(this);
             translation_ = translation;
             rotation_ = rotation;
             scale_ = scale;
@@ -38,7 +35,6 @@ namespace ShipPrototype.Components
         public SpatialComponent(GameEntity entity, SpatialComponent parent) : this(entity)
         {
             parent_ = parent;
-            parent_.children_.Add(this);
             translation_ = Vector2.Zero;
             rotation_ = 0f;
             scale_ = Vector2.One;
@@ -63,7 +59,18 @@ namespace ShipPrototype.Components
         }
 
         public Vector2 translation_ { get; set; }
-        public float rotation_ { get; set; }
+        private float rotation_;
+        public float rotation
+        {
+            get
+            {
+                return rotation_;
+            }
+            set
+            {
+                rotation_ = value % MathHelper.TwoPi;
+            }
+        }
         public Vector2 scale_ { get; set; }
 
         public Vector2 w_scale
@@ -94,6 +101,17 @@ namespace ShipPrototype.Components
                     return rotation_;
                 }
             }
+            set
+            {
+                if (parent_ != null)
+                {
+                    rotation_ = value - parent_.w_rotation;
+                }
+                else
+                {
+                    rotation_ = value;
+                }
+            }
         }
 
         public Vector2 w_translation
@@ -115,6 +133,18 @@ namespace ShipPrototype.Components
                 else
                 {
                     return translation_;
+                }
+            }
+
+            set
+            {
+                if (parent_ != null)
+                {
+                    translation_ = value - parent_.w_translation;
+                }
+                else
+                {
+                    translation_ = value;
                 }
             }
         }

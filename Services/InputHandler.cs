@@ -8,7 +8,7 @@ using Microsoft.Xna.Framework.Input;
 
 namespace ShipPrototype.Services
 {
-    class InputHandler : Interfaces.IInputHandler
+    class InputHandler
     {
         static InputHandler instance = null;
         public static InputHandler init()

@@ -9,7 +9,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace ShipPrototype.Services
 {
-    class TextureManager : Interfaces.ITextureManager
+    class TextureManager
     {
         private static Texture2D blank_;
         private static TextureManager instance_;

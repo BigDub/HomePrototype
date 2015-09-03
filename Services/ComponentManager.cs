@@ -10,7 +10,7 @@ using ShipPrototype.Components;
 
 namespace ShipPrototype.Services
 {
-    class ComponentManager : Interfaces.IComponentManager
+    class ComponentManager
     {
         private static ComponentManager instance_;
 
@@ -22,12 +22,16 @@ namespace ShipPrototype.Services
             return instance_;
         }
 
+        private BlendState bs;
+
         private List<PhysicsComponent> physics_;
         private List<RenderComponent> renders_;
         private List<SpatialComponent> spatials_;
         private List<ControllerComponent> controllers_;
         private List<TileCoord> tiles_;
-        private List<InfoComponent> info_;
+        public List<InfoComponent> info_;
+
+        private List<GameEntity> removals_, additions_;
 
         private ComponentManager()
         {
@@ -37,6 +41,9 @@ namespace ShipPrototype.Services
             controllers_ = new List<ControllerComponent>();
             tiles_ = new List<TileCoord>();
             info_ = new List<InfoComponent>();
+
+            additions_ = new List<GameEntity>();
+            removals_ = new List<GameEntity>();
         }
 
         private void add(PhysicsComponent physic)
@@ -54,8 +61,7 @@ namespace ShipPrototype.Services
         private void add(ControllerComponent controller)
         {
             controllers_.Add(controller);
-            Locator.getInputHandler().addKeyPressObserver(controller.KeyPressed);
-            Locator.getInputHandler().addKeyReleaseObserver(controller.KeyReleased);
+            controller.linkInput();
         }
         private void add(TileCoord tile)
         {
@@ -66,7 +72,7 @@ namespace ShipPrototype.Services
             info_.Add(info);
         }
 
-        public void addEntity(GameEntity entity)
+        public void addEntity_(GameEntity entity)
         {
             if (entity.physic != null)
                 add(entity.physic);
@@ -80,6 +86,11 @@ namespace ShipPrototype.Services
                 add(entity.tile);
             if (entity.info != null)
                 add(entity.info);
+        }
+
+        public void addEntity(GameEntity entity)
+        {
+            additions_.Add(entity);
         }
 
         private void remove(InfoComponent info)
@@ -105,11 +116,15 @@ namespace ShipPrototype.Services
         private void remove(ControllerComponent controller)
         {
             controllers_.Remove(controller);
-            Locator.getInputHandler().removeKeyPressObserver(controller.KeyPressed);
-            Locator.getInputHandler().removeKeyReleaseObserver(controller.KeyReleased);
+            controller.unlinkInput();
         }
 
         public void removeEntity(GameEntity entity)
+        {
+            removals_.Add(entity);
+        }
+
+        private void removeEntity_(GameEntity entity)
         {
             if (entity.physic != null)
                 remove(entity.physic);
@@ -146,6 +161,18 @@ namespace ShipPrototype.Services
             {
                 controller.update(elapsed);
             }
+
+            foreach (GameEntity entity in additions_)
+            {
+                addEntity_(entity);
+            }
+            additions_.Clear();
+            foreach (GameEntity entity in removals_)
+            {
+                removeEntity_(entity);
+            }
+            removals_.Clear();
+
             foreach (PhysicsComponent physic in physics_)
             {
                 physic.update(elapsed);
@@ -154,7 +181,7 @@ namespace ShipPrototype.Services
 
         public void render(SpriteBatch spriteBatch)
         {
-            spriteBatch.Begin(SpriteSortMode.Deferred, null);
+            spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.NonPremultiplied);
             foreach (RenderComponent render in renders_)
             {
                 render.render(spriteBatch);

@@ -8,6 +8,7 @@ namespace ShipPrototype.ControlStates
 {
     class Selector : BaseState
     {
+        public static float pickRange = 150f;
         public Selector()
         {
         }
@@ -17,9 +18,9 @@ namespace ShipPrototype.ControlStates
             if (e.button_ == MouseButton.LEFT)
             {
                 GameEntity en = Locator.getComponentManager().pick(Locator.getShip().tiles, mouseTile_);
-                if (en != null && en.info != null)
+                if (en != null && en.info != null && (en.spatial.w_translation - Locator.getPlayer().spatial.w_translation).Length() < pickRange)
                 {
-                    manager_.add(Locator.getWindowFactory().infoWindow(en));
+                    manager_.setInfo(Locator.getWindowFactory().infoWindow(en, maus_), en);
                 }
             }
         }
