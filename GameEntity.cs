@@ -14,5 +14,7 @@ namespace ShipPrototype
         public ControllerComponent controller { get; set; }
         public TileCoord tile { get; set; }
         public InfoComponent info { get; set; }
+        public InventoryComponent inventory { get; set; }
+        public ProductionComponent production { get; set; }
     }
 }

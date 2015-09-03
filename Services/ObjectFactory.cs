@@ -22,13 +22,27 @@ namespace ShipPrototype.Services
             combustInfo,
             thrustInfo,
             reactorInfo;
+        public InfoComponent
+            orbItem,
+            scrapItem;
         public void init()
+        {
+            initObjects();
+            initItems();
+        }
+        private void initItems()
+        {
+            orbItem = new InfoComponent();
+            orbItem.name = "Orb";
+            orbItem.itemTex = Locator.getTextureManager().loadTexture("orb");
+        }
+        private void initObjects()
         {
             gunInfo = new InfoComponent();
             gunInfo.name = "Cannon";
 
             debrisInfo = new InfoComponent();
-            debrisInfo.name = "Debris";
+            debrisInfo.name = "Scrap";
             debrisInfo.type = ObjectType.LOOTABLE;
 
             wreckInfo = new InfoComponent();
@@ -60,39 +74,42 @@ namespace ShipPrototype.Services
             reactorInfo.name = "Reactor";
         }
         
-        public GameEntity createGun()
+        public GameEntity createGun(int num)
         {
             GameEntity gun = new GameEntity();
             gun.render = new RenderComponent(gun, Locator.getTextureManager().loadTexture("gun64"), 0, new Vector2(32), Color.White);
             gun.spatial = new SpatialComponent(gun, Locator.getShip().entity_.spatial);
             gun.tile = new TileCoord(gun, Point.Zero, new Point(2, 2), Locator.getShip().tiles);
             gun.info = new InfoComponent(gun, gunInfo);
+            gun.inventory = new InventoryComponent(gun, 3);
             gun.controller = new TurretController(gun);
             return gun;
         }
 
-        public GameEntity createTractor()
+        public GameEntity createTractor(int num)
         {
             GameEntity gun = new GameEntity();
             gun.render = new RenderComponent(gun, Locator.getTextureManager().loadTexture("mag128"), 0, new Vector2(64), Color.White);
             gun.spatial = new SpatialComponent(gun, Locator.getShip().entity_.spatial);
             gun.tile = new TileCoord(gun, Point.Zero, new Point(4, 4), Locator.getShip().tiles);
             gun.info = new InfoComponent(gun, tractorInfo);
+            gun.inventory = new InventoryComponent(gun, 3);
             gun.controller = new TractorController(gun);
             return gun;
         }
 
-        public GameEntity createFurnace()
+        public GameEntity createFurnace(int num)
         {
             GameEntity gun = new GameEntity();
             gun.render = new RenderComponent(gun, Locator.getTextureManager().loadTexture("furnace"), 0, new Vector2(32), Color.White);
             gun.spatial = new SpatialComponent(gun, Locator.getShip().entity_.spatial);
             gun.tile = new TileCoord(gun, Point.Zero, new Point(2, 2), Locator.getShip().tiles);
+            gun.inventory = new InventoryComponent(gun, 3);
             gun.info = new InfoComponent(gun, furnaceInfo);
             return gun;
         }
 
-        public GameEntity createTank()
+        public GameEntity createTank(int num)
         {
             GameEntity gun = new GameEntity();
             gun.render = new RenderComponent(gun, Locator.getTextureManager().loadTexture("tank"), 0, new Vector2(32, 16), Color.White);
@@ -102,27 +119,29 @@ namespace ShipPrototype.Services
             return gun;
         }
 
-        public GameEntity createCompressor()
+        public GameEntity createCompressor(int num)
         {
             GameEntity gun = new GameEntity();
             gun.render = new RenderComponent(gun, Locator.getTextureManager().loadTexture("compressor"), 0, new Vector2(32, 16), Color.White);
             gun.spatial = new SpatialComponent(gun, Locator.getShip().entity_.spatial);
             gun.tile = new TileCoord(gun, Point.Zero, new Point(2, 1), Locator.getShip().tiles);
+            gun.inventory = new InventoryComponent(gun, 3);
             gun.info = new InfoComponent(gun, compressorInfo);
             return gun;
         }
 
-        public GameEntity createPump()
+        public GameEntity createPump(int num)
         {
             GameEntity gun = new GameEntity();
             gun.render = new RenderComponent(gun, Locator.getTextureManager().loadTexture("pump"), 0, new Vector2(32, 16), Color.White);
             gun.spatial = new SpatialComponent(gun, Locator.getShip().entity_.spatial);
             gun.tile = new TileCoord(gun, Point.Zero, new Point(2, 1), Locator.getShip().tiles);
+            gun.inventory = new InventoryComponent(gun, 3);
             gun.info = new InfoComponent(gun, pumpInfo);
             return gun;
         }
 
-        public GameEntity createCombChamb()
+        public GameEntity createCombChamb(int num)
         {
             GameEntity gun = new GameEntity();
             gun.render = new RenderComponent(gun, Locator.getTextureManager().loadTexture("cchamber"), 0, new Vector2(48, 32), Color.White);
@@ -132,7 +151,7 @@ namespace ShipPrototype.Services
             return gun;
         }
 
-        public GameEntity createThruster()
+        public GameEntity createThruster(int num)
         {
             GameEntity gun = new GameEntity();
             gun.render = new RenderComponent(gun, Locator.getTextureManager().loadTexture("thrust"), 0, new Vector2(32, 32), Color.White);
@@ -142,12 +161,13 @@ namespace ShipPrototype.Services
             return gun;
         }
 
-        public GameEntity createReactor()
+        public GameEntity createReactor(int num)
         {
             GameEntity gun = new GameEntity();
             gun.render = new RenderComponent(gun, Locator.getTextureManager().loadTexture("reactor"), 0, new Vector2(64), Color.White);
             gun.spatial = new SpatialComponent(gun, Locator.getShip().entity_.spatial);
             gun.tile = new TileCoord(gun, Point.Zero, new Point(4, 4), Locator.getShip().tiles);
+            gun.inventory = new InventoryComponent(gun, 3);
             gun.info = new InfoComponent(gun, reactorInfo);
             return gun;
         }
@@ -231,6 +251,14 @@ namespace ShipPrototype.Services
             deb.controller = new WreckController(deb);
 
             return deb;
+        }
+
+        public GameEntity createOrb()
+        {
+            GameEntity e = new GameEntity();
+            e.info = new InfoComponent(e, orbItem);
+
+            return e;
         }
     }
 }

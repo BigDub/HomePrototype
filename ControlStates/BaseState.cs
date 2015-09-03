@@ -3,16 +3,21 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+
+using ShipPrototype.Services;
+using ShipPrototype.UI;
 
 namespace ShipPrototype.ControlStates
 {
     abstract class BaseState : ControllerState
     {
+        public static float interactRange = 150f;
         protected static Services.ControlManager manager_;
         protected Point mouseTile_;
         protected Vector2 maus_;
 
-        public static void setParent(Services.ControlManager manager)
+        public static void setParent(ControlManager manager)
         {
             manager_ = manager;
         }
@@ -32,6 +37,35 @@ namespace ShipPrototype.ControlStates
 
         public virtual void mouseUp(object sender, MouseEventArgs e)
         {
+            if (e.button_ == MouseButton.LEFT)
+            {
+                GameEntity en = Locator.getComponentManager().pick(Locator.getShip().tiles, mouseTile_);
+                if (en != null && en.info != null && (en.spatial.w_translation - Locator.getPlayer().spatial.w_translation).Length() < interactRange)
+                {
+                    manager_.setInfo(Locator.getWindowFactory().infoWindow(en, maus_), en);
+                }
+            }
+        }
+
+        public virtual void onPost(Services.Post post)
+        {
+            switch (post.category)
+            {
+                case PostCategory.PLACING_OBJECT:
+                    changeState(new ControlStates.Placer(post.targetEntity));
+                    break;
+                default:
+                    break;
+            }
+        }
+
+
+        public virtual void render(SpriteBatch spriteBatch)
+        {
+            foreach (Window window in manager_.windows)
+            {
+                window.render(spriteBatch);
+            }
         }
     }
 }

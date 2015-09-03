@@ -9,8 +9,8 @@ namespace ShipPrototype.UI
 {
     class Text : UIComponent
     {
-        String text_;
-        bool isLarge_;
+        public String text_;
+        public bool isLarge_;
         public Color color_;
 
         public Text(String text, bool isLarge)
@@ -21,11 +21,11 @@ namespace ShipPrototype.UI
             isLarge_ = isLarge;
             if (isLarge_)
             {
-                size_ = Locator.getScreenPrinter().measureStringLg(text);
+                size_ = Locator.getScreenPrinter().measureStringLg(text_);
             }
             else
             {
-                size_ = Locator.getScreenPrinter().measureStringLg(text);
+                size_ = Locator.getScreenPrinter().measureStringLg(text_);
             }
         }
 
@@ -39,6 +39,19 @@ namespace ShipPrototype.UI
             {
                 Locator.getScreenPrinter().printSm(spriteBatch, loc, text_, color_);
             }
+        }
+
+        public override void pack()
+        {
+            if (isLarge_)
+            {
+                size_ = Locator.getScreenPrinter().measureStringLg(text_);
+            }
+            else
+            {
+                size_ = Locator.getScreenPrinter().measureStringLg(text_);
+            }
+            base.pack();
         }
     }
 }

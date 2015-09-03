@@ -10,7 +10,7 @@ namespace ShipPrototype.Components
     {
         public WreckController(GameEntity entity) : base(entity)
         {
-            Locator.getMessageBoard().register(Services.PostCategory.JUNK_SHOT, notify);
+            Locator.getMessageBoard().register(notify);
         }
 
         public void notify(Services.Post post)

@@ -4,25 +4,28 @@ using System.Linq;
 using System.Text;
 using Microsoft.Xna.Framework;
 
+using ShipPrototype.Services;
+
 namespace ShipPrototype.ControlStates
 {
     class Selector : BaseState
     {
-        public static float pickRange = 150f;
         public Selector()
         {
         }
 
-        public override void mouseUp(object sender, MouseEventArgs e)
+        public override void onPost(Post post)
         {
-            if (e.button_ == MouseButton.LEFT)
+            switch (post.category)
             {
-                GameEntity en = Locator.getComponentManager().pick(Locator.getShip().tiles, mouseTile_);
-                if (en != null && en.info != null && (en.spatial.w_translation - Locator.getPlayer().spatial.w_translation).Length() < pickRange)
-                {
-                    manager_.setInfo(Locator.getWindowFactory().infoWindow(en, maus_), en);
-                }
+                case PostCategory.REQUEST_ITEM:
+                    changeState(new HoldingItem(post.sourceEntity, post.targetEntity, post.slot));
+                    post.sourceEntity.inventory.takeItem(post.slot);
+                    break;
+                default:
+                    break;
             }
+            base.onPost(post);
         }
     }
 }

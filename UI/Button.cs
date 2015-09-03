@@ -10,30 +10,36 @@ namespace ShipPrototype.UI
     class Button : UIComponent
     {
         public static int buttonSize = 32;
-        int texture_id_;
-        public GUIMessage message_;
-        public delegate GameEntity SpawnFunction();
-        SpawnFunction method;
+        public int texture_id_;
+        public Services.PostCategory category_;
+        public delegate GameEntity EntityDelegate(int num);
+        public EntityDelegate getSource, getTarget;
+        public int slot_;
 
-        public Button(int texture_id, GUIMessage message)
+        public Button(int texture_id, Services.PostCategory category)
         {
             texture_id_ = texture_id;
             Texture2D tex = Locator.getTextureManager().getTexture(texture_id);
             size_ = new Vector2(buttonSize);
-            message_ = message;
-        }
-
-        public void setSpawn(SpawnFunction f)
-        {
-            method = f;
+            category_ = category;
+            slot_ = -1;
+            getSource = null;
+            getTarget = null;
         }
 
         public override void click(Vector2 pos)
         {
-            if (message_ == GUIMessage.START_PLACEMENT && method != null)
-            {
-                Locator.getControlManager().sendEvent(new GUIEvent(message_, method()));
-            }
+            GameEntity source = null;
+            GameEntity target = null;
+
+            if (getSource != null)
+                source = getSource(slot_);
+            if (getTarget != null)
+                target = getTarget(slot_);
+
+            Locator.getMessageBoard().postMessage(
+                new Services.Post(category_, source, target, slot_)
+            );
         }
 
         public override void render(SpriteBatch spriteBatch)

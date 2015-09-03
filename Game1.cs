@@ -47,6 +47,8 @@ namespace ShipPrototype
         protected override void Initialize()
         {
             // TODO: Add your initialization logic here
+
+            Locator.provide(MessageBoard.init());
             Locator.provide(InputHandler.init());
             Locator.provide(ComponentManager.init());
             Locator.provide(new Random());
@@ -54,11 +56,7 @@ namespace ShipPrototype
             Locator.getInputHandler().addKeyReleaseObserver(Locator.getControlManager().keyRelease);
             Locator.getInputHandler().addMouseReleaseObserver(Locator.getControlManager().mouseUp);
             ControlStates.BaseState.setParent(Locator.getControlManager());
-            ObjectFactory ob = new ObjectFactory();
-            ob.init();
-            Locator.provide(ob);
 
-            Locator.provide(MessageBoard.init());
 
             base.Initialize();
         }
@@ -74,6 +72,9 @@ namespace ShipPrototype
 
             Locator.provide(ScreenPrinter.init(Content.Load<SpriteFont>("LargeFont"), Content.Load<SpriteFont>("SmallFont")));
             Locator.provide(TextureManager.init(GraphicsDevice, Content));
+            ObjectFactory ob = new ObjectFactory();
+            ob.init();
+            Locator.provide(ob);
             bg_tex_id = Locator.getTextureManager().loadTexture("spacebg");
 
             world = new GameEntity();
@@ -90,6 +91,7 @@ namespace ShipPrototype
             player = new GameEntity();
             player.spatial = new Components.SpatialComponent(player, Locator.getShip().entity_.spatial, new Vector2(900, 416), 0, Vector2.One);
             player.render = new Components.RenderComponent(player, Locator.getTextureManager().loadTexture("person32"), 1, new Vector2(16), Color.White);
+            player.inventory = new InventoryComponent(player, 10);
             player.controller = new Components.PlayerControllerComponent(player);
             Locator.getComponentManager().addEntity(player);
             Locator.providePlayer(player);

@@ -22,8 +22,6 @@ namespace ShipPrototype.Services
             return instance_;
         }
 
-        private BlendState bs;
-
         private List<PhysicsComponent> physics_;
         private List<RenderComponent> renders_;
         private List<SpatialComponent> spatials_;

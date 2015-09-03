@@ -58,5 +58,7 @@ namespace ShipPrototype.UI
         public virtual void update(float elapsed) { }
 
         public abstract void render(SpriteBatch spriteBatch);
+
+        public virtual void cleanup() { }
     }
 }

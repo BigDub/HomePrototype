@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Microsoft.Xna.Framework.Graphics;
 
 using ShipPrototype.Services;
 
@@ -15,5 +16,9 @@ namespace ShipPrototype.ControlStates
         void update(float elapsed);
 
         void mouseUp(object sender, MouseEventArgs e);
+
+        void onPost(Services.Post post);
+
+        void render(SpriteBatch spriteBatch);
     }
 }

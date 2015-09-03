@@ -16,8 +16,25 @@ namespace ShipPrototype.Components
 
         public TurretController(GameEntity entity) : base(entity)
         {
+            entity.inventory.register(checkStatus);
         }
 
+        private void checkStatus()
+        {
+            InventoryComponent ic = entity_.inventory;
+            for (int index = 0; index < ic.capacity; ++index)
+            {
+                GameEntity item = ic.getItem(index);
+                if (item == null)
+                    continue;
+                if (item.info.itemTex == Locator.getObjectFactory().orbItem.itemTex)
+                {
+                    entity_.info.state = ObjectState.OK;
+                    return;
+                }
+            }
+            entity_.info.state = ObjectState.DISABLED;
+        }
 
         private void findTarget()
         {

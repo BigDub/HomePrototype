@@ -8,9 +8,10 @@ namespace ShipPrototype.Services
 {
     enum PostCategory
     {
+        PLACING_OBJECT,
         PLACED_OBJECT,
         REMOVED_OBJECT,
-        TOOK_ITEM,
+        REQUEST_ITEM,
         PLACED_ITEM,
         END_GAME,
         SPAWN_JUNK,
@@ -36,14 +37,9 @@ namespace ShipPrototype.Services
 
     class MessageBoard
     {
-        public delegate void notify(Post post);
+        public delegate void Notify(Post post);
 
-        private notify
-            placeObjectNotify,
-            removeObjectNotify,
-            takeItemNotify,
-            placeItemNotify,
-            special;
+        private Notify onPost_;
 
         private static MessageBoard instance_;
         public static MessageBoard init()
@@ -54,64 +50,15 @@ namespace ShipPrototype.Services
             return instance_;
         }
 
-        public void register(PostCategory category, notify func)
+        public void register(Notify func)
         {
-            switch (category)
-            {
-                case PostCategory.PLACED_ITEM:
-                    placeItemNotify += func;
-                    break;
-                case PostCategory.PLACED_OBJECT:
-                    placeObjectNotify += func;
-                    break;
-                case PostCategory.REMOVED_OBJECT:
-                    removeObjectNotify += func;
-                    break;
-                case PostCategory.TOOK_ITEM:
-                    takeItemNotify += func;
-                    break;
-                default:
-                    special += func;
-                    break;
-            }
+            onPost_ += func;
         }
 
         public void postMessage(Post post)
         {
             Console.WriteLine("Recieved post: " + post.category);
-            switch (post.category)
-            {
-                case PostCategory.PLACED_ITEM:
-                    if (placeItemNotify != null)
-                    {
-                        placeItemNotify(post);
-                    }
-                    break;
-                case PostCategory.PLACED_OBJECT:
-                    if (placeObjectNotify != null)
-                    {
-                        placeObjectNotify(post);
-                    }
-                    break;
-                case PostCategory.REMOVED_OBJECT:
-                    if (removeObjectNotify != null)
-                    {
-                        removeObjectNotify(post);
-                    }
-                    break;
-                case PostCategory.TOOK_ITEM:
-                    if (takeItemNotify != null)
-                    {
-                        takeItemNotify(post);
-                    }
-                    break;
-                default:
-                    if (special != null)
-                    {
-                        special(post);
-                    }
-                    break;
-            }
+            onPost_(post);
         }
     }
 }

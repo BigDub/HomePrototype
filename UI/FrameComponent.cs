@@ -121,5 +121,19 @@ namespace ShipPrototype.UI
                 }
             }
  	    }
+
+        public override void cleanup()
+        {
+            for (int row = 0; row < rows_; ++row)
+            {
+                for (int col = 0; col < columns_; ++col)
+                {
+                    if (children_[row, col] != null)
+                    {
+                        children_[row, col].cleanup();
+                    }
+                }
+            }
+        }
     }
 }

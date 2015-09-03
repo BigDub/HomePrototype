@@ -11,28 +11,6 @@ using ShipPrototype.ControlStates;
 
 namespace ShipPrototype
 {
-    enum GUIMessage
-    {
-        NONE,
-        BUTTON_PRESS,
-        NEW_CANNON,
-        NEW_TRACTOR,
-        NEW_FURNACE,
-        NEW_TANK,
-        START_PLACEMENT
-    };
-
-    class GUIEvent
-    {
-        public GUIMessage message_;
-        public GameEntity entity_;
-
-        public GUIEvent(GUIMessage message, GameEntity entity)
-        {
-            message_ = message;
-            entity_ = entity;
-        }
-    }
     enum MouseButton
     {
         LEFT = 0,
@@ -68,7 +46,7 @@ namespace ShipPrototype.Services
 {
     class ControlManager
     {
-        List<Window> windows;
+        public List<Window> windows;
 
         Window inventory;
         Window info;
@@ -80,6 +58,12 @@ namespace ShipPrototype.Services
         public ControlManager()
         {
             windows = new List<Window>();
+            Locator.getMessageBoard().register(onPost);
+        }
+
+        public void onPost(Services.Post post)
+        {
+            state.onPost(post);
         }
 
         public void forceState(ControllerState newState)
@@ -125,7 +109,7 @@ namespace ShipPrototype.Services
             }
             if (info != null && observing != null)
             {
-                if ((observing.spatial.w_translation - Locator.getPlayer().spatial.w_translation).Length() > Selector.pickRange)
+                if ((observing.spatial.w_translation - Locator.getPlayer().spatial.w_translation).Length() > BaseState.interactRange)
                 {
                     windows.Remove(info);
                     info = null;
@@ -182,23 +166,8 @@ namespace ShipPrototype.Services
         public void render(SpriteBatch spriteBatch)
         {
             spriteBatch.Begin(SpriteSortMode.Deferred, null);
-            foreach (Window window in windows)
-            {
-                window.render(spriteBatch);
-            }
+            state.render(spriteBatch);
             spriteBatch.End();
-        }
-
-        public void sendEvent(GUIEvent e)
-        {
-            switch (e.message_)
-            {
-                case GUIMessage.START_PLACEMENT:
-                    state.changeState(new ControlStates.Placer(e.entity_));
-                    break;
-                default:
-                    break;
-            }
         }
     }
 }

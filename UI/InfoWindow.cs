@@ -2,17 +2,40 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Microsoft.Xna.Framework;
+
+using ShipPrototype.Components;
 
 namespace ShipPrototype.UI
 {
     class InfoWindow : Window
     {
-        Components.InfoComponent info_;
-
-        public InfoWindow(Components.InfoComponent info, int rows, int columns)
-            : base(rows, columns)
+        public InfoWindow(InfoComponent info)
+            : base(2, 1)
         {
-            info_ = info;
+            padding_ = new Vector2(5);
+            minimum_ = new Vector2(200, 50);
+            Text name = new Text(info.name, true);
+            name.center = false;
+            set(0, 0, name);
+            
+            int subsections = 1;
+            if (info.entity_.inventory != null)
+            {
+                subsections++;
+            }
+            Window subFrames = new Window(subsections, 1);
+            subFrames.color_ = new Color(0, 0, 0, 255);
+            int subIndex = 0;
+
+            subFrames.set(subIndex++, 0, new StatusFrame(info));
+
+            if (info.entity_.inventory != null)
+            {
+                subFrames.set(subIndex++, 0, new InventoryFrame(info.entity_.inventory));
+            }
+
+            set(1, 0, subFrames);
         }
     }
 }

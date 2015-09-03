@@ -24,30 +24,10 @@ namespace ShipPrototype.Components
 
     class InfoComponent
     {
-        private static int inv_size = 5;
         public GameEntity entity_;
 
-        public InfoComponent()
-        {
-            inventory = new GameEntity[inv_size];
-            entity_ = null;
-            cusName_ = false;
-            type_ = ObjectType.SHIPBOARD;
-        }
-
-        public InfoComponent(GameEntity entity)
-        {
-            entity_ = entity;
-            cusName_ = false;
-            type_ = ObjectType.SHIPBOARD;
-        }
-        public InfoComponent(GameEntity entity, InfoComponent parent)
-        {
-            entity_ = entity;
-            parent_ = parent;
-            cusName_ = false;
-            type_ = ObjectType.INHERIT;
-        }
+        public delegate void Notify();
+        Notify notify_;
 
         public InfoComponent parent_;
 
@@ -59,7 +39,7 @@ namespace ShipPrototype.Components
             {
                 if (!cusName_)
                 {
-                    return parent_.name;                    
+                    return parent_.name;
                 }
                 return name_;
             }
@@ -68,8 +48,28 @@ namespace ShipPrototype.Components
             {
                 name_ = value;
                 cusName_ = true;
+                onUpdate();
             }
         }
+
+        private bool cusItemTex_;
+        private int itemTex_ = -1;
+        public int itemTex
+        {
+            get
+            {
+                if (cusItemTex_)
+                    return itemTex_;
+                return parent_.itemTex;
+            }
+            set
+            {
+                itemTex_ = value;
+                cusItemTex_ = true;
+                onUpdate();
+            }
+        }
+
         private ObjectType type_;
         public ObjectType type
         {
@@ -84,6 +84,7 @@ namespace ShipPrototype.Components
             set
             {
                 type_ = value;
+                onUpdate();
             }
         }
 
@@ -98,9 +99,48 @@ namespace ShipPrototype.Components
             {
                 state_ = value;
                 entity_.render.setState(state_);
+                onUpdate();
             }
         }
 
-        public GameEntity[] inventory;
+        public InfoComponent()
+        {
+            entity_ = null;
+            cusName_ = false;
+            cusItemTex_ = false;
+            type_ = ObjectType.SHIPBOARD;
+        }
+
+        public InfoComponent(GameEntity entity)
+        {
+            entity_ = entity;
+            cusName_ = false;
+            cusItemTex_ = false;
+            type_ = ObjectType.SHIPBOARD;
+        }
+        public InfoComponent(GameEntity entity, InfoComponent parent)
+        {
+            entity_ = entity;
+            parent_ = parent;
+            cusName_ = false;
+            cusItemTex_ = false;
+            type_ = ObjectType.INHERIT;
+        }
+
+
+        private void onUpdate()
+        {
+            if (notify_ != null)
+                notify_();
+        }
+
+        public void register(Notify notify)
+        {
+            notify_ += notify;
+        }
+        public void unregister(Notify notify)
+        {
+            notify_ -= notify;
+        }
     }
 }

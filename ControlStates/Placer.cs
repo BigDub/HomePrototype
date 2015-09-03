@@ -4,6 +4,9 @@ using System.Linq;
 using System.Text;
 using Microsoft.Xna.Framework;
 
+using ShipPrototype.Services;
+using ShipPrototype.Components;
+
 namespace ShipPrototype.ControlStates
 {
     class Placer : BaseState
@@ -16,11 +19,11 @@ namespace ShipPrototype.ControlStates
         public Placer(GameEntity thing)
         {
             marker = thing;
-            marker.info.state = Components.ObjectState.DISABLED;
+            marker.info.state = ObjectState.DISABLED;
             ground = new GameEntity();
-            ground.spatial = new Components.SpatialComponent(ground, marker.spatial);
+            ground.spatial = new SpatialComponent(ground, marker.spatial);
             ground.spatial.scale_ = new Vector2(marker.tile.size_.X, marker.tile.size_.Y) * 32f;
-            ground.render = new Components.RenderComponent(ground, -1, 0, new Vector2(0.5f), Color.White);
+            ground.render = new RenderComponent(ground, -1, 0, new Vector2(0.5f), Color.White);
             Locator.getComponentManager().addEntity(ground);
             Locator.getComponentManager().addEntity(marker);
             canPlace = false;
@@ -72,10 +75,13 @@ namespace ShipPrototype.ControlStates
                     if (canPlace)
                     {
                         Console.WriteLine("Placing " + marker.info.name + " at " + mouseTile_.X + ", " + mouseTile_.Y);
-                        marker.info.state = Components.ObjectState.OK;
+                        marker.info.state = ObjectState.OK;
                         Locator.getShip().tiles.build(mouseTile_, marker.tile.size_);
-                        marker = null;
+                        Locator.getMessageBoard().postMessage(
+                            new Post(PostCategory.PLACED_OBJECT, Locator.getPlayer(), marker, 0)
+                        );
 
+                        marker = null;
                         changeState(new Selector());
                     }
                     break;

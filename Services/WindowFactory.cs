@@ -24,52 +24,74 @@ namespace ShipPrototype.Services
             Text text = new Text("Inventory", true);
             text.center = false;
             window.set(0, 0, text);
+            window.set(1, 0, new InventoryFrame(Locator.getPlayer().inventory));
+
+            window.pack();
+            window.loc_ = new Vector2((screen_.X - window.size.X) / 2f, screen_.Y - window.size.Y);
+            return window;
+        }
+
+        public Window cheaterWindow()
+        {
+            Window window = new Window(2, 1);
+            window.padding_ = new Vector2(5, 0);
+            Text text = new Text("Inventory", true);
+            text.center = false;
+            window.set(0, 0, text);
             FrameComponent buttonframe = new FrameComponent(2, 10);
             window.set(1, 0, buttonframe);
 
             int num = 0;
             Button button;
 
-            button = new Button(Locator.getTextureManager().loadTexture("gun64"), GUIMessage.START_PLACEMENT);
-            button.setSpawn(Locator.getObjectFactory().createGun);
+            button = new Button(Locator.getTextureManager().loadTexture("gun64"), PostCategory.PLACING_OBJECT);
+            button.getTarget = Locator.getObjectFactory().createGun;
+            button.slot_ = num;
             buttonframe.set(0, num++, button);
 
-            button = new Button(Locator.getTextureManager().loadTexture("mag128"), GUIMessage.START_PLACEMENT);
-            button.setSpawn(Locator.getObjectFactory().createTractor);
+            button = new Button(Locator.getTextureManager().loadTexture("mag128"), PostCategory.PLACING_OBJECT);
+            button.getTarget = Locator.getObjectFactory().createTractor;
+            button.slot_ = num;
             buttonframe.set(0, num++, button);
 
-            button = new Button(Locator.getTextureManager().loadTexture("furnace"), GUIMessage.START_PLACEMENT);
-            button.setSpawn(Locator.getObjectFactory().createFurnace);
+            button = new Button(Locator.getTextureManager().loadTexture("furnace"), PostCategory.PLACING_OBJECT);
+            button.getTarget = Locator.getObjectFactory().createFurnace;
+            button.slot_ = num;
             buttonframe.set(0, num++, button);
 
-            button = new Button(Locator.getTextureManager().loadTexture("tank"), GUIMessage.START_PLACEMENT);
-            button.setSpawn(Locator.getObjectFactory().createTank);
+            button = new Button(Locator.getTextureManager().loadTexture("tank"), PostCategory.PLACING_OBJECT);
+            button.getTarget = Locator.getObjectFactory().createTank;
+            button.slot_ = num;
             buttonframe.set(0, num++, button);
 
-            button = new Button(Locator.getTextureManager().loadTexture("cchamber"), GUIMessage.START_PLACEMENT);
-            button.setSpawn(Locator.getObjectFactory().createCombChamb);
+            button = new Button(Locator.getTextureManager().loadTexture("cchamber"), PostCategory.PLACING_OBJECT);
+            button.getTarget = Locator.getObjectFactory().createCombChamb;
+            button.slot_ = num;
             buttonframe.set(0, num++, button);
 
-            button = new Button(Locator.getTextureManager().loadTexture("compressor"), GUIMessage.START_PLACEMENT);
-            button.setSpawn(Locator.getObjectFactory().createCompressor);
+            button = new Button(Locator.getTextureManager().loadTexture("compressor"), PostCategory.PLACING_OBJECT);
+            button.getTarget = Locator.getObjectFactory().createCompressor;
+            button.slot_ = num;
             buttonframe.set(0, num++, button);
 
-            button = new Button(Locator.getTextureManager().loadTexture("pump"), GUIMessage.START_PLACEMENT);
-            button.setSpawn(Locator.getObjectFactory().createPump);
+            button = new Button(Locator.getTextureManager().loadTexture("pump"), PostCategory.PLACING_OBJECT);
+            button.getTarget = Locator.getObjectFactory().createPump;
+            button.slot_ = num;
             buttonframe.set(0, num++, button);
 
-            button = new Button(Locator.getTextureManager().loadTexture("thrust"), GUIMessage.START_PLACEMENT);
-            button.setSpawn(Locator.getObjectFactory().createThruster);
+            button = new Button(Locator.getTextureManager().loadTexture("thrust"), PostCategory.PLACING_OBJECT);
+            button.getTarget = Locator.getObjectFactory().createThruster;
+            button.slot_ = num;
             buttonframe.set(0, num++, button);
 
-            button = new Button(Locator.getTextureManager().loadTexture("reactor"), GUIMessage.START_PLACEMENT);
-            button.setSpawn(Locator.getObjectFactory().createReactor);
+            button = new Button(Locator.getTextureManager().loadTexture("reactor"), PostCategory.PLACING_OBJECT);
+            button.getTarget = Locator.getObjectFactory().createReactor;
             buttonframe.set(0, num++, button);
 
             for (int i = num; i < 10; ++i)
             {
-                button = new Button(Locator.getTextureManager().loadTexture("tile32"), GUIMessage.BUTTON_PRESS);
-                //button.padding_ = new Vector2(5);
+                button = new Button(Locator.getTextureManager().loadTexture("tile32"), PostCategory.PLACED_ITEM);
+                button.slot_ = num;
                 buttonframe.set(0, i, button);
             }
 
@@ -87,37 +109,7 @@ namespace ShipPrototype.Services
 
         public Window infoWindow(GameEntity entity, Vector2 point)
         {
-            Window window = new Window(2, 1);
-            window.padding_ = new Vector2(5);
-            window.minimum_ = new Vector2(200, 50);
-            Text name = new Text(entity.info.name, true);
-            name.center = false;
-            window.set(0, 0, name);
-
-            Window frame = new Window(1, 2);
-            window.padding_ = new Vector2(5);
-            frame.color_ = new Color(0, 0, 0, 255);
-            Text status = new Text("STATUS...", false);
-            status.center = false;
-            frame.set(0, 0, status);
-            switch (entity.info.state)
-            {
-                case Components.ObjectState.OK:
-                    status = new Text("ONLINE", false);
-                    status.color_ = Color.LightGreen;
-                    break;
-                case Components.ObjectState.DISABLED:
-                    status = new Text("OFFLINE", false);
-                    status.color_ = Color.Yellow;
-                    break;
-                case Components.ObjectState.DAMAGED:
-                    status = new Text("DAMAGED", false);
-                    status.color_ = Color.Red;
-                    break;
-            }
-            status.center = false;
-            frame.set(0, 1, status);
-            window.set(1, 0, frame);
+            Window window = new InfoWindow(entity.info);
 
             window.pack();
             window.loc_ = point;

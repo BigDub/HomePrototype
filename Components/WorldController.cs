@@ -17,7 +17,7 @@ namespace ShipPrototype.Components
         {
             screen_ = screen;
 
-            Locator.getMessageBoard().register(Services.PostCategory.END_GAME, listen);
+            Locator.getMessageBoard().register(listen);
         }
 
         void listen(Services.Post post)
