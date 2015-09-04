@@ -7,12 +7,10 @@ namespace ShipPrototype.Components
 {
     class ProductionComponent : InventoryComponent
     {
-        public GameEntity entity_;
+        public ItemInfo input_, output_;
+        public float productionTime_, currentTime;
 
-        InfoComponent input_, output_;
-        float productionTime_, currentTime;
-
-        public ProductionComponent(GameEntity entity, InfoComponent input, InfoComponent output, float productionTime) : base(entity, 2)
+        public ProductionComponent(GameEntity entity, ItemInfo input, ItemInfo output, float productionTime) : base(entity, 2)
         {
             input_ = input;
             output_ = output;
@@ -26,7 +24,7 @@ namespace ShipPrototype.Components
 
             GameEntity left = getItem(0);
             GameEntity right = getItem(1);
-            if (left == null || right != null || left.info.itemTex != input_.itemTex)
+            if (left == null || right != null || left.item != input_)
                 return;
 
             currentTime += elapsed;
@@ -36,7 +34,7 @@ namespace ShipPrototype.Components
                 Locator.getComponentManager().removeEntity(left);
                 items_[0] = null;
                 right = new GameEntity();
-                right.info = new InfoComponent(right, output_);
+                right.item = output_;
                 items_[1] = right;
             }
             onUpdate();

@@ -27,7 +27,7 @@ namespace ShipPrototype.Components
                 GameEntity item = ic.getItem(index);
                 if (item == null)
                     continue;
-                if (item.info.itemTex == Locator.getObjectFactory().orbItem.itemTex)
+                if (item.item == Locator.getObjectFactory().orbItem)
                 {
                     entity_.info.state = ObjectState.OK;
                     return;

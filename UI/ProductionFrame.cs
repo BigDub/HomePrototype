@@ -8,43 +8,28 @@ using ShipPrototype.Components;
 
 namespace ShipPrototype.UI
 {
-    class InventoryFrame : FrameComponent
+    class ProductionFrame : FrameComponent
     {
-        private static int maxPerLine = 10;
-        InventoryComponent source_;
-        FrameComponent inner_;
+        ProductionComponent source_;
         Button[] buttons_;
-        int capacity_;
+        ProgressBar bar_;
 
-        public InventoryFrame(InventoryComponent source) : base(1, 1)
+        public ProductionFrame(ProductionComponent source) : base(1, 3)
         {
             padding_ = new Vector2(5);
             source_ = source;
-            capacity_ = source_.capacity;
-            buttons_ = new Button[capacity_];
-            int rows = 1;
-            int cols = capacity_;
-            if (capacity_ > maxPerLine)
-            {
-                rows = capacity_ / maxPerLine;
-                cols = maxPerLine;
-            }
-            inner_ = new FrameComponent(rows, cols);
-            set(0, 0, inner_);
-            int row = 0;
-            int col = 0;
-            for (int index = 0; index < capacity_; ++index)
+            buttons_ = new Button[2];
+            for (int index = 0; index < 2; ++index)
             {
                 buttons_[index] = new Button(Locator.getTextureManager().loadTexture("tile32"), Services.PostCategory.PLACED_ITEM);
                 buttons_[index].slot_ = index;
                 buttons_[index].getSource = getSource;
-                inner_.set(row, col++, buttons_[index]);
-                if (col >= maxPerLine)
-                {
-                    ++row;
-                    col = 0;
-                }
             }
+            bar_ = new ProgressBar();
+
+            set(0, 0, buttons_[0]);
+            set(0, 1, bar_);
+            set(0, 2, buttons_[1]);
 
             refresh();
             source_.register(refresh);
@@ -57,7 +42,7 @@ namespace ShipPrototype.UI
 
         public void refresh()
         {
-            for (int index = 0; index < source_.capacity; ++index)
+            for (int index = 0; index < 2; ++index)
             {
                 GameEntity e = source_.getItem(index);
                 if (e == null)
@@ -73,6 +58,7 @@ namespace ShipPrototype.UI
                     buttons_[index].getTarget = source_.getItem;
                 }
             }
+            bar_.percent = source_.currentTime / source_.productionTime_;
         }
 
         public override void cleanup()

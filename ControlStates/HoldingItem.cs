@@ -27,7 +27,7 @@ namespace ShipPrototype.ControlStates
             origSlot_ = slot;
             marker = new GameEntity();
             marker.spatial = new Components.SpatialComponent(marker, Vector2.Zero, 0, Vector2.One);
-            marker.render = new Components.RenderComponent(marker, item.info.itemTex, 0, Vector2.Zero, Color.White);
+            marker.render = new Components.RenderComponent(marker, item.item.tex_, 0, Vector2.Zero, Color.White);
 
             itemPlaced_ = false;
         }
@@ -70,14 +70,30 @@ namespace ShipPrototype.ControlStates
             switch (post.category)
             {
                 case PostCategory.PLACED_ITEM:
-                    post.sourceEntity.inventory.placeItem(item_, post.slot);
+                    if (post.sourceEntity.inventory != null)
+                    {
+                        post.sourceEntity.inventory.placeItem(item_, post.slot);
+                    }
+                    else
+                    {
+                        post.sourceEntity.production.placeItem(item_, post.slot);
+                    }
                     itemPlaced_ = true;
                     changeState(new Selector());
                     return;
                 case PostCategory.REQUEST_ITEM:
-                    post.sourceEntity.inventory.takeItem(post.slot);
-                    post.sourceEntity.inventory.placeItem(item_, post.slot);
+                    if (post.sourceEntity.inventory != null)
+                    {
+                        post.sourceEntity.inventory.takeItem(post.slot);
+                        post.sourceEntity.inventory.placeItem(item_, post.slot);
+                    }
+                    else
+                    {
+                        post.sourceEntity.production.takeItem(post.slot);
+                        post.sourceEntity.production.placeItem(item_, post.slot);
+                    }
                     item_ = post.targetEntity;
+                    marker.render = new Components.RenderComponent(marker, item_.item.tex_, 0, Vector2.Zero, Color.White);
                     origContainer_ = post.sourceEntity;
                     origSlot_ = post.slot;
                     return;

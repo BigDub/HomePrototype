@@ -16,5 +16,6 @@ namespace ShipPrototype
         public InfoComponent info { get; set; }
         public InventoryComponent inventory { get; set; }
         public ProductionComponent production { get; set; }
+        public ItemInfo item { get; set; }
     }
 }

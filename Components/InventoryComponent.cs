@@ -66,5 +66,16 @@ namespace ShipPrototype.Components
                 return null;
             return items_[slot];
         }
+
+        public int numItems()
+        {
+            int count = 0;
+            for (int index = 0; index < capacity; ++index)
+            {
+                if (items_[index] != null)
+                    ++count;
+            }
+            return count;
+        }
     }
 }

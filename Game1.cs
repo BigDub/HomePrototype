@@ -130,10 +130,10 @@ namespace ShipPrototype
 
             //world.spatial.translation_ = new Vector2((screen.X / 2) - player.spatial.translation_.X, (screen.Y / 2) - player.spatial.translation_.Y);
 
-            MouseState ms = Mouse.GetState();
+            /*MouseState ms = Mouse.GetState();
             Vector2 mous = new Vector2(ms.X, ms.Y);
             Vector2 spot = Locator.getShip().entity_.spatial.worldToLocal(mous);
-            test.spatial.translation_ = spot;
+            test.spatial.translation_ = spot;*/
             
             // TODO: Add your update logic here
 

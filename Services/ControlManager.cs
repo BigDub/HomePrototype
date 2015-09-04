@@ -150,11 +150,6 @@ namespace ShipPrototype.Services
         {
             if (e.key_ == Keys.F1)
             {
-                Locator.getMessageBoard().postMessage(new Post(PostCategory.END_GAME, null, null, 0));
-                Locator.getShip().end();
-            }
-            if (e.key_ == Keys.F2)
-            {
                 GameEntity entity = Locator.getObjectFactory().createWreck();
                 entity.spatial.translation_ = new Vector2(1800, 1000);
                 entity.physic.velocity_ = new Vector2(0, -100);

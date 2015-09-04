@@ -28,7 +28,7 @@ namespace ShipPrototype.Components
                 GameEntity item = ic.getItem(index);
                 if (item == null)
                     continue;
-                if (item.info.itemTex == Locator.getObjectFactory().orbItem.itemTex)
+                if (item.item == Locator.getObjectFactory().orbItem)
                 {
                     entity_.info.state = ObjectState.OK;
                     return;
@@ -55,7 +55,7 @@ namespace ShipPrototype.Components
 
         public override void update(float elapsed)
         {
-            if (entity_.info.state != ObjectState.OK)
+            if (entity_.info.state != ObjectState.OK || entity_.inventory.numItems() == entity_.inventory.capacity)
                 return;
 
             if (target_ == null)
@@ -74,6 +74,14 @@ namespace ShipPrototype.Components
                 {
                     Locator.getComponentManager().removeEntity(target_);
                     target_ = null;
+                    for (int index = 0; index < entity_.inventory.capacity; ++index)
+                    {
+                        if (entity_.inventory.getItem(index) == null)
+                        {
+                            entity_.inventory.placeItem(Locator.getObjectFactory().createScrap(), index);
+                            break;
+                        }
+                    }
                 }
             }
         }

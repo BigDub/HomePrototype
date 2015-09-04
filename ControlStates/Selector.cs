@@ -20,7 +20,14 @@ namespace ShipPrototype.ControlStates
             {
                 case PostCategory.REQUEST_ITEM:
                     changeState(new HoldingItem(post.sourceEntity, post.targetEntity, post.slot));
-                    post.sourceEntity.inventory.takeItem(post.slot);
+                    if (post.sourceEntity.inventory != null)
+                    {
+                        post.sourceEntity.inventory.takeItem(post.slot);
+                    }
+                    else
+                    {
+                        post.sourceEntity.production.takeItem(post.slot);
+                    }
                     break;
                 default:
                     break;

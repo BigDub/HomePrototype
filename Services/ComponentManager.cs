@@ -28,6 +28,7 @@ namespace ShipPrototype.Services
         private List<ControllerComponent> controllers_;
         private List<TileCoord> tiles_;
         public List<InfoComponent> info_;
+        public List<ProductionComponent> prod_;
 
         private List<GameEntity> removals_, additions_;
 
@@ -39,6 +40,7 @@ namespace ShipPrototype.Services
             controllers_ = new List<ControllerComponent>();
             tiles_ = new List<TileCoord>();
             info_ = new List<InfoComponent>();
+            prod_ = new List<ProductionComponent>();
 
             additions_ = new List<GameEntity>();
             removals_ = new List<GameEntity>();
@@ -69,6 +71,10 @@ namespace ShipPrototype.Services
         {
             info_.Add(info);
         }
+        private void add(ProductionComponent prod)
+        {
+            prod_.Add(prod);
+        }
 
         public void addEntity_(GameEntity entity)
         {
@@ -84,6 +90,8 @@ namespace ShipPrototype.Services
                 add(entity.tile);
             if (entity.info != null)
                 add(entity.info);
+            if (entity.production != null)
+                add(entity.production);
         }
 
         public void addEntity(GameEntity entity)
@@ -91,6 +99,10 @@ namespace ShipPrototype.Services
             additions_.Add(entity);
         }
 
+        private void remove(ProductionComponent prod)
+        {
+            prod_.Remove(prod);
+        }
         private void remove(InfoComponent info)
         {
             info_.Remove(info);
@@ -136,6 +148,8 @@ namespace ShipPrototype.Services
                 remove(entity.tile);
             if (entity.info != null)
                 remove(entity.info);
+            if (entity.production != null)
+                remove(entity.production);
         }
 
         public GameEntity pick(TileSystemComponent tsc, Point point)
@@ -170,7 +184,10 @@ namespace ShipPrototype.Services
                 removeEntity_(entity);
             }
             removals_.Clear();
-
+            foreach (ProductionComponent prod in prod_)
+            {
+                prod.update(elapsed);
+            }
             foreach (PhysicsComponent physic in physics_)
             {
                 physic.update(elapsed);

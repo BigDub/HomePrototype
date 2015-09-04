@@ -22,7 +22,11 @@ namespace ShipPrototype.UI
             int subsections = 1;
             if (info.entity_.inventory != null)
             {
-                subsections++;
+                ++subsections;
+            }
+            if (info.entity_.production != null)
+            {
+                ++subsections;
             }
             Window subFrames = new Window(subsections, 1);
             subFrames.color_ = new Color(0, 0, 0, 255);
@@ -30,6 +34,10 @@ namespace ShipPrototype.UI
 
             subFrames.set(subIndex++, 0, new StatusFrame(info));
 
+            if (info.entity_.production != null)
+            {
+                subFrames.set(subIndex++, 0, new ProductionFrame(info.entity_.production));
+            }
             if (info.entity_.inventory != null)
             {
                 subFrames.set(subIndex++, 0, new InventoryFrame(info.entity_.inventory));

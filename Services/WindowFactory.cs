@@ -19,12 +19,9 @@ namespace ShipPrototype.Services
 
         public Window inventoryWindow()
         {
-            Window window = new Window(2, 1);
+            Window window = new Window(1, 1);
             window.padding_ = new Vector2(5, 0);
-            Text text = new Text("Inventory", true);
-            text.center = false;
-            window.set(0, 0, text);
-            window.set(1, 0, new InventoryFrame(Locator.getPlayer().inventory));
+            window.set(0, 0, new InventoryFrame(Locator.getPlayer().inventory));
 
             window.pack();
             window.loc_ = new Vector2((screen_.X - window.size.X) / 2f, screen_.Y - window.size.Y);
