@@ -6,16 +6,14 @@ using Microsoft.Xna.Framework;
 
 namespace ShipPrototype.Components
 {
-    class PhysicsComponent
+    class PhysicsComponent : Component
     {
-        protected GameEntity entity_;
-
         PhysicsComponent parent_;
         List<PhysicsComponent> children_;
 
         private PhysicsComponent(GameEntity entity)
+            : base(entity)
         {
-            entity_ = entity;
             children_ = new List<PhysicsComponent>();
         }
 

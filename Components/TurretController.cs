@@ -14,7 +14,8 @@ namespace ShipPrototype.Components
 
         private GameEntity target_;
 
-        public TurretController(GameEntity entity) : base(entity)
+        public TurretController(GameEntity entity)
+            : base(entity)
         {
             entity.inventory.register(checkStatus);
         }
@@ -82,7 +83,7 @@ namespace ShipPrototype.Components
                     if (distance < shootRange_)
                     {
                         Locator.getComponentManager().addEntity(Locator.getObjectFactory().createLaser(entity_.spatial.w_translation, entity_.spatial.w_rotation, distance));
-                        Locator.getMessageBoard().postMessage(new Services.Post(Services.PostCategory.JUNK_SHOT, entity_, target_, 0));
+                        Locator.getMessageBoard().postMessage(new Services.Post(Services.PostCategory.JUNK_SHOT, entity_, target_, null, 0));
                         target_ = null;
                     }
                 }

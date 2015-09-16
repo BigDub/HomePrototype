@@ -34,7 +34,7 @@ namespace ShipPrototype.Components
             if (motor && pinion)
             {
                 entity_.info.state = ObjectState.OK;
-                Locator.getMessageBoard().postMessage(new Services.Post(Services.PostCategory.END_GAME, null, null, 0));
+                Locator.getMessageBoard().postMessage(new Services.Post(Services.PostCategory.END_GAME, null, null, null, 0));
                 Locator.getShip().end();
                 Locator.getComponentManager().addEntity(Locator.getObjectFactory().createTitle());
             }

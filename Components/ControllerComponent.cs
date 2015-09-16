@@ -5,13 +5,11 @@ using System.Text;
 
 namespace ShipPrototype.Components
 {
-    abstract class ControllerComponent
+    abstract class ControllerComponent : Component
     {
-        public GameEntity entity_;
-
         public ControllerComponent(GameEntity entity)
+            : base(entity)
         {
-            entity_ = entity;
         }
 
         public virtual void update(float elapsed)

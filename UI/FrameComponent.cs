@@ -23,6 +23,7 @@ namespace ShipPrototype.UI
         public override void click(Vector2 pos)
         {
             pos -= loc_;
+            pos -= padding_;
             foreach (UIComponent child in children_)
             {
                 if (child == null)

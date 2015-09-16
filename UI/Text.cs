@@ -49,7 +49,7 @@ namespace ShipPrototype.UI
             }
             else
             {
-                size_ = Locator.getScreenPrinter().measureStringLg(text_);
+                size_ = Locator.getScreenPrinter().measureStringSm(text_);
             }
             base.pack();
         }

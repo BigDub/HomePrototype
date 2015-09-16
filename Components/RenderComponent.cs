@@ -7,10 +7,8 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace ShipPrototype.Components
 {
-    class RenderComponent
+    class RenderComponent : Component
     {
-        GameEntity entity_;
-
         RenderComponent parent_;
         List<RenderComponent> children_;
         
@@ -20,8 +18,8 @@ namespace ShipPrototype.Components
         public Color color_;
 
         private RenderComponent(GameEntity entity)
+            : base(entity)
         {
-            entity_ = entity;
             children_ = new List<RenderComponent>();
         }
 

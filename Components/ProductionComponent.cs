@@ -24,7 +24,10 @@ namespace ShipPrototype.Components
 
             GameEntity left = getItem(0);
             GameEntity right = getItem(1);
-            if (left == null || right != null || left.item != input_)
+            if (left == null || (right != null && right.item != output_))
+                return;
+
+            if (input_ != null && left.item != input_)
                 return;
 
             currentTime += elapsed;
@@ -32,10 +35,24 @@ namespace ShipPrototype.Components
             {
                 currentTime = 0;
                 Locator.getComponentManager().removeEntity(left);
-                items_[0] = null;
-                right = new GameEntity();
-                right.item = output_;
-                items_[1] = right;
+                if (left.info.number > 1)
+                {
+                    left.info.number -= 1;
+                }
+                else
+                {
+                    items_[0] = null;
+                }
+
+                if (right == null)
+                {
+                    right = Locator.getObjectFactory().createItem(output_);
+                    items_[1] = right;
+                }
+                else
+                {
+                    right.info.number++;
+                }
             }
             onUpdate();
         }

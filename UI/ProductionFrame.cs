@@ -11,19 +11,19 @@ namespace ShipPrototype.UI
     class ProductionFrame : FrameComponent
     {
         ProductionComponent source_;
-        Button[] buttons_;
+        ItemButton[] buttons_;
         ProgressBar bar_;
 
         public ProductionFrame(ProductionComponent source) : base(1, 3)
         {
             padding_ = new Vector2(5);
             source_ = source;
-            buttons_ = new Button[2];
+            buttons_ = new ItemButton[2];
             for (int index = 0; index < 2; ++index)
             {
-                buttons_[index] = new Button(Locator.getTextureManager().loadTexture("tile32"), Services.PostCategory.PLACED_ITEM);
-                buttons_[index].slot_ = index;
+                buttons_[index] = new ItemButton(source_, index);
                 buttons_[index].getSource = getSource;
+                buttons_[index].getComponent = getComponent;
             }
             bar_ = new ProgressBar();
 
@@ -39,24 +39,16 @@ namespace ShipPrototype.UI
         {
             return source_.entity_;
         }
+        public InventoryComponent getComponent()
+        {
+            return source_;
+        }
 
         public void refresh()
         {
             for (int index = 0; index < 2; ++index)
             {
-                GameEntity e = source_.getItem(index);
-                if (e == null)
-                {
-                    buttons_[index].texture_id_ = Locator.getTextureManager().loadTexture("tile32");
-                    buttons_[index].category_ = Services.PostCategory.PLACED_ITEM;
-                    buttons_[index].getTarget = null;
-                }
-                else
-                {
-                    buttons_[index].texture_id_ = e.item.tex_;
-                    buttons_[index].category_ = Services.PostCategory.REQUEST_ITEM;
-                    buttons_[index].getTarget = source_.getItem;
-                }
+                buttons_[index].refresh();
             }
             bar_.percent = source_.currentTime / source_.productionTime_;
         }

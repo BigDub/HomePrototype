@@ -22,7 +22,8 @@ namespace ShipPrototype.Services
             combustInfo,
             thrustInfo,
             reactorInfo,
-            machineshopInfo;
+            machineshopInfo,
+            grinderInfo;
         public ItemInfo
             orbItem,
             scrapItem,
@@ -81,6 +82,9 @@ namespace ShipPrototype.Services
 
             machineshopInfo = new InfoComponent();
             machineshopInfo.name = "Machine Shop";
+
+            grinderInfo = new InfoComponent();
+            grinderInfo.name = "Grinder";
         }
         
         public GameEntity createGun(int num)
@@ -194,6 +198,18 @@ namespace ShipPrototype.Services
             return e;
         }
 
+        public GameEntity createGrinder(int num)
+        {
+            GameEntity e = new GameEntity();
+            e.render = new RenderComponent(e, Locator.getTextureManager().loadTexture("grinder"), 0, new Vector2(32), Color.White);
+            e.spatial = new SpatialComponent(e, Locator.getShip().entity_.spatial);
+            e.tile = new TileCoord(e, Point.Zero, new Point(2, 2), Locator.getShip().tiles);
+            //e.inventory = new InventoryComponent(e, 3);
+            e.production = new ProductionComponent(e, null, scrapItem, 1);
+            e.info = new InfoComponent(e, grinderInfo);
+            return e;
+        }
+
         public GameEntity createEndGameFlame()
         {
             GameEntity e = new GameEntity();
@@ -286,34 +302,58 @@ namespace ShipPrototype.Services
             return e;
         }
 
+        public GameEntity createItem(ItemInfo item)
+        {
+            GameEntity e = new GameEntity();
+            e.item = item;
+            e.info = new InfoComponent(e);
+            e.info.type = ObjectType.ITEM;
+            e.info.number = 1;
+            return e;
+        }
         public GameEntity createOrb()
         {
             GameEntity e = new GameEntity();
             e.item = orbItem;
+            e.info = new InfoComponent(e);
+            e.info.type = ObjectType.ITEM;
+            e.info.number = 1;
             return e;
         }
         public GameEntity createScrap()
         {
             GameEntity e = new GameEntity();
             e.item = scrapItem;
+            e.info = new InfoComponent(e);
+            e.info.type = ObjectType.ITEM;
+            e.info.number = 1;
             return e;
         }
         public GameEntity createSteel()
         {
             GameEntity e = new GameEntity();
             e.item = steelItem;
+            e.info = new InfoComponent(e);
+            e.info.type = ObjectType.ITEM;
+            e.info.number = 1;
             return e;
         }
         public GameEntity createPinion()
         {
             GameEntity e = new GameEntity();
             e.item = pinionItem;
+            e.info = new InfoComponent(e);
+            e.info.type = ObjectType.ITEM;
+            e.info.number = 1;
             return e;
         }
         public GameEntity createMotor()
         {
             GameEntity e = new GameEntity();
             e.item = motorItem;
+            e.info = new InfoComponent(e);
+            e.info.type = ObjectType.ITEM;
+            e.info.number = 1;
             return e;
         }
     }

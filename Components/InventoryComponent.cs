@@ -5,9 +5,8 @@ using System.Text;
 
 namespace ShipPrototype.Components
 {
-    class InventoryComponent
+    class InventoryComponent : Component
     {
-        public GameEntity entity_;
         public GameEntity[] items_;
         private int capacity_;
         public int capacity
@@ -22,8 +21,8 @@ namespace ShipPrototype.Components
         Notify notify_;
 
         public InventoryComponent(GameEntity entity, int cap)
+            : base(entity)
         {
-            entity_ = entity;
             capacity_ = cap;
             items_ = new GameEntity[capacity_];
         }

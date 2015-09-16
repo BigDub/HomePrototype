@@ -78,7 +78,7 @@ namespace ShipPrototype.ControlStates
                         marker.info.state = ObjectState.OK;
                         Locator.getShip().tiles.build(mouseTile_, marker.tile.size_);
                         Locator.getMessageBoard().postMessage(
-                            new Post(PostCategory.PLACED_OBJECT, Locator.getPlayer(), marker, 0)
+                            new Post(PostCategory.PLACED_OBJECT, Locator.getPlayer(), marker, null, 0)
                         );
 
                         marker = null;

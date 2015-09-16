@@ -14,7 +14,7 @@ namespace ShipPrototype.UI
             : base(2, 1)
         {
             padding_ = new Vector2(5);
-            minimum_ = new Vector2(200, 50);
+            minimum_ = new Vector2(100, 50);
             Text name = new Text(info.name, true);
             name.center = false;
             set(0, 0, name);

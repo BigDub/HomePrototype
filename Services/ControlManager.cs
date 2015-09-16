@@ -154,7 +154,7 @@ namespace ShipPrototype.Services
                 entity.spatial.translation_ = new Vector2(1800, 1000);
                 entity.physic.velocity_ = new Vector2(0, -100);
                 Locator.getComponentManager().addEntity(entity);
-                Locator.getMessageBoard().postMessage(new Post(PostCategory.JUNK_SPAWN, entity, null, 0));
+                Locator.getMessageBoard().postMessage(new Post(PostCategory.JUNK_SPAWN, entity, null, null, 0));
             }
         }
 

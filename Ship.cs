@@ -64,7 +64,7 @@ namespace ShipPrototype
 
             make(o.createFurnace(0), 40, 10);
             make(o.createMachineShop(0), 38, 10);
-            make(o.createFurnace(0), 40, 16, ObjectState.DAMAGED);
+            make(o.createGrinder(0), 40, 16);
 
             make(o.createTank(0), 7, 0, ObjectState.DAMAGED);
             make(o.createTank(0), 9, 0, ObjectState.DAMAGED);
@@ -135,7 +135,7 @@ namespace ShipPrototype
 
             Locator.getComponentManager().addEntity(entity_);
 
-            tiles = new Components.TileSystemComponent();
+            tiles = new Components.TileSystemComponent(entity_);
             tiles.addArea(new Point(16, 8), Point.Zero);
             tiles.addArea(new Point(16, 8), new Point(0, 10));
             tiles.addArea(new Point(16, 8), new Point(0, 20));

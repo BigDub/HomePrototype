@@ -5,6 +5,8 @@ using System.Text;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
+using ShipPrototype.Components;
+
 namespace ShipPrototype.UI
 {
     class Button : UIComponent
@@ -13,7 +15,9 @@ namespace ShipPrototype.UI
         public int texture_id_;
         public Services.PostCategory category_;
         public delegate GameEntity EntityDelegate(int num);
+        public delegate Component ComponentDelegate();
         public EntityDelegate getSource, getTarget;
+        public ComponentDelegate getComponent;
         public int slot_;
 
         public Button(int texture_id, Services.PostCategory category)
@@ -31,14 +35,17 @@ namespace ShipPrototype.UI
         {
             GameEntity source = null;
             GameEntity target = null;
+            Component component = null;
 
             if (getSource != null)
                 source = getSource(slot_);
             if (getTarget != null)
                 target = getTarget(slot_);
+            if (getComponent != null)
+                component = getComponent();
 
             Locator.getMessageBoard().postMessage(
-                new Services.Post(category_, source, target, slot_)
+                new Services.Post(category_, source, target, component, slot_)
             );
         }
 

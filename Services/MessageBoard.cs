@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Diagnostics;
 
+using ShipPrototype.Components;
+
 namespace ShipPrototype.Services
 {
     enum PostCategory
@@ -13,6 +15,7 @@ namespace ShipPrototype.Services
         REMOVED_OBJECT,
         REQUEST_ITEM,
         PLACED_ITEM,
+        INV_SLOT,
         END_GAME,
         SPAWN_JUNK,
         JUNK_SHOT,
@@ -24,13 +27,15 @@ namespace ShipPrototype.Services
         public PostCategory category;
         public GameEntity sourceEntity;
         public GameEntity targetEntity;
+        public Component component;
         public int slot;
 
-        public Post(PostCategory c, GameEntity s, GameEntity t, int sl)
+        public Post(PostCategory c, GameEntity s = null, GameEntity t = null, Component comp = null, int sl = 0)
         {
             category = c;
             sourceEntity = s;
             targetEntity = t;
+            component = comp;
             slot = sl;
         }
     }

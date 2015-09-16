@@ -15,12 +15,13 @@ namespace ShipPrototype
 }
 namespace ShipPrototype.Components
 {
-    class TileSystemComponent
+    class TileSystemComponent : Component
     {
         private static float tileSize = 32;
         List<TileArea> areas_;
 
-        public TileSystemComponent()
+        public TileSystemComponent(GameEntity entity)
+            : base(entity)
         {
             areas_ = new List<TileArea>();
         }

@@ -13,7 +13,7 @@ namespace ShipPrototype.UI
         private static int maxPerLine = 10;
         InventoryComponent source_;
         FrameComponent inner_;
-        Button[] buttons_;
+        ItemButton[] buttons_;
         int capacity_;
 
         public InventoryFrame(InventoryComponent source) : base(1, 1)
@@ -21,7 +21,7 @@ namespace ShipPrototype.UI
             padding_ = new Vector2(5);
             source_ = source;
             capacity_ = source_.capacity;
-            buttons_ = new Button[capacity_];
+            buttons_ = new ItemButton[capacity_];
             int rows = 1;
             int cols = capacity_;
             if (capacity_ > maxPerLine)
@@ -35,9 +35,10 @@ namespace ShipPrototype.UI
             int col = 0;
             for (int index = 0; index < capacity_; ++index)
             {
-                buttons_[index] = new Button(Locator.getTextureManager().loadTexture("tile32"), Services.PostCategory.PLACED_ITEM);
+                buttons_[index] = new ItemButton(source_, index);
                 buttons_[index].slot_ = index;
                 buttons_[index].getSource = getSource;
+                buttons_[index].getComponent = getComponent;
                 inner_.set(row, col++, buttons_[index]);
                 if (col >= maxPerLine)
                 {
@@ -55,23 +56,16 @@ namespace ShipPrototype.UI
             return source_.entity_;
         }
 
+        public Component getComponent()
+        {
+            return source_;
+        }
+
         public void refresh()
         {
             for (int index = 0; index < source_.capacity; ++index)
             {
-                GameEntity e = source_.getItem(index);
-                if (e == null)
-                {
-                    buttons_[index].texture_id_ = Locator.getTextureManager().loadTexture("tile32");
-                    buttons_[index].category_ = Services.PostCategory.PLACED_ITEM;
-                    buttons_[index].getTarget = null;
-                }
-                else
-                {
-                    buttons_[index].texture_id_ = e.item.tex_;
-                    buttons_[index].category_ = Services.PostCategory.REQUEST_ITEM;
-                    buttons_[index].getTarget = source_.getItem;
-                }
+                buttons_[index].refresh();
             }
         }
 

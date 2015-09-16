@@ -127,6 +127,19 @@ namespace ShipPrototype.Components
             type_ = ObjectType.INHERIT;
         }
 
+        private int number_;
+        public int number
+        {
+            get
+            {
+                return number_;
+            }
+            set
+            {
+                number_ = value;
+                onUpdate();
+            }
+        }
 
         private void onUpdate()
         {
