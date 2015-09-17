@@ -26,7 +26,7 @@ namespace ShipPrototype.Services
         private List<RenderComponent> renders_;
         private List<SpatialComponent> spatials_;
         private List<ControllerComponent> controllers_;
-        private List<TileCoord> tiles_;
+        public List<TileCoord> tiles_;
         public List<InfoComponent> info_;
         public List<ProductionComponent> prod_;
 
@@ -125,8 +125,8 @@ namespace ShipPrototype.Services
         }
         private void remove(ControllerComponent controller)
         {
-            controllers_.Remove(controller);
             controller.unlinkInput();
+            controllers_.Remove(controller);
         }
 
         public void removeEntity(GameEntity entity)

@@ -16,6 +16,7 @@ namespace ShipPrototype.ControlStates
         protected static Services.ControlManager manager_;
         protected Point mouseTile_;
         protected Vector2 maus_;
+        protected bool mouseInWindow_;
 
         public static void setParent(ControlManager manager)
         {
@@ -47,6 +48,10 @@ namespace ShipPrototype.ControlStates
             }
         }
 
+        public virtual void mouseDown(object sender, MouseEventArgs e)
+        {
+        }
+
         public virtual void onPost(Services.Post post)
         {
             switch (post.category)
@@ -59,13 +64,19 @@ namespace ShipPrototype.ControlStates
             }
         }
 
+        public void setMouseInWindow(bool b)
+        {
+            mouseInWindow_ = b;
+        }
 
         public virtual void render(SpriteBatch spriteBatch)
         {
+            spriteBatch.Begin(SpriteSortMode.Deferred, null);
             foreach (Window window in manager_.windows)
             {
                 window.render(spriteBatch);
             }
+            spriteBatch.End();
         }
     }
 }

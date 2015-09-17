@@ -38,8 +38,40 @@ namespace ShipPrototype
         {
             e.tile.coord_ = new Point(x, y);
             e.info.state = state;
+            e.item.state_ = state;
             ship.tiles.build(e.tile.coord_, e.tile.size_);
-            Locator.getComponentManager().addEntity(e);
+            Locator.getComponentManager().addEntity_(e);
+        }
+        private static void makeOtank(int x, int y)
+        {
+            GameEntity e = Locator.getObjectFactory().createTank();
+            e.inventory.offerItem(Locator.getObjectFactory().createOxygen(100));
+            make(e, x, y);
+        }
+        private static void makeHtank(int x, int y)
+        {
+            GameEntity e = Locator.getObjectFactory().createTank();
+            e.inventory.offerItem(Locator.getObjectFactory().createHydrogen(100));
+            make(e, x, y);
+        }
+        private static void makeGpump(int x, int y)
+        {
+            GameEntity e = Locator.getObjectFactory().createPump();
+            e.inventory.offerItem(Locator.getObjectFactory().createPinion());
+            e.inventory.offerItem(Locator.getObjectFactory().createMotor());
+            make(e, x, y);
+        }
+        private static void makeMpump(int x, int y)
+        {
+            GameEntity e = Locator.getObjectFactory().createPump();
+            e.inventory.offerItem(Locator.getObjectFactory().createMotor());
+            make(e, x, y, ObjectState.DISABLED);
+        }
+        private static void makePpump(int x, int y)
+        {
+            GameEntity e = Locator.getObjectFactory().createPump();
+            e.inventory.offerItem(Locator.getObjectFactory().createPinion());
+            make(e, x, y, ObjectState.DISABLED);
         }
 
         public void end()
@@ -52,79 +84,91 @@ namespace ShipPrototype
         {
             Services.ObjectFactory o = Locator.getObjectFactory();
             GameEntity e;
-            e = o.createGun(0);
+            e = o.createGun();
             make(e, 45, 7);
 
             GameEntity orb = o.createOrb();
             e.inventory.placeItem(orb, 0);
 
-            make(o.createGun(0), 45, 19, ObjectState.DISABLED);
+            make(o.createGun(), 45, 19, ObjectState.DISABLED);
 
-            make(o.createTractor(0), 44, 12, ObjectState.DISABLED);
+            make(o.createTractor(), 44, 12, ObjectState.DISABLED);
 
-            make(o.createFurnace(0), 40, 10);
-            make(o.createMachineShop(0), 38, 10);
-            make(o.createGrinder(0), 40, 16);
+            make(o.createFurnace(), 40, 10);
+            make(o.createMachineShop(), 38, 10);
+            make(o.createGrinder(), 40, 16);
 
-            make(o.createTank(0), 7, 0, ObjectState.DAMAGED);
-            make(o.createTank(0), 9, 0, ObjectState.DAMAGED);
-            make(o.createPump(0), 5, 0, ObjectState.DAMAGED);
-            make(o.createTank(0), 7, 1, ObjectState.DAMAGED);
-            make(o.createTank(0), 9, 1, ObjectState.DAMAGED);
-            make(o.createCompressor(0), 5, 1, ObjectState.DAMAGED);
-            make(o.createCombChamb(0), 2, 0, ObjectState.DAMAGED);
-            make(o.createThruster(0), 0, 0, ObjectState.DAMAGED);
+            make(o.createTank(), 7, 0, ObjectState.DAMAGED);
+            make(o.createPump(), 9, 0, ObjectState.DAMAGED);
+            make(o.createTank(), 11, 0, ObjectState.DAMAGED);
+            make(o.createPump(), 5, 0, ObjectState.DAMAGED);
+            make(o.createTank(), 7, 1, ObjectState.DAMAGED);
+            make(o.createPump(), 9, 1, ObjectState.DAMAGED);
+            make(o.createTank(), 11, 1, ObjectState.DAMAGED);
+            make(o.createPump(), 5, 1, ObjectState.DAMAGED);
+            make(o.createCombChamb(), 2, 0, ObjectState.DAMAGED);
+            make(o.createThruster(), 0, 0, ObjectState.DAMAGED);
 
-            make(o.createTank(0), 7, 6);
-            make(o.createTank(0), 9, 6, ObjectState.DAMAGED);
-            make(o.createCompressor(0), 5, 6, ObjectState.DISABLED);
-            make(o.createTank(0), 7, 7);
-            make(o.createTank(0), 9, 7);
-            make(o.createPump(0), 5, 7, ObjectState.DAMAGED);
-            make(o.createCombChamb(0), 2, 6, ObjectState.DAMAGED);
-            make(o.createThruster(0), 0, 6, ObjectState.DAMAGED);
+            makeHtank(7, 6);
+            make(o.createPump(), 9, 6, ObjectState.DAMAGED);
+            make(o.createTank(), 11, 6, ObjectState.DAMAGED);
+            make(o.createPump(), 5, 6, ObjectState.DISABLED);
+            makeOtank(7, 7);
+            make(o.createPump(), 9, 7, ObjectState.DAMAGED);
+            makeOtank(11, 7);
+            make(o.createPump(), 5, 7, ObjectState.DAMAGED);
+            make(o.createCombChamb(), 2, 6, ObjectState.DAMAGED);
+            make(o.createThruster(), 0, 6, ObjectState.DAMAGED);
 
-            make(o.createTank(0), 7, 10);
-            make(o.createTank(0), 9, 10);
-            make(o.createCompressor(0), 5, 10);
-            make(o.createTank(0), 7, 11);
-            make(o.createTank(0), 9, 11);
-            e = o.createPump(0);
-            e.controller = new EndPumpController(e);
-            make(e, 5, 11, ObjectState.DISABLED);
-            make(o.createCombChamb(0), 2, 10);
-            make(o.createThruster(0), 0, 10);
 
-            make(o.createTank(0), 7, 16);
-            make(o.createTank(0), 9, 16, ObjectState.DAMAGED);
-            make(o.createPump(0), 5, 16, ObjectState.DAMAGED);
-            make(o.createTank(0), 7, 17);
-            make(o.createTank(0), 9, 17, ObjectState.DAMAGED);
-            make(o.createCompressor(0), 5, 17, ObjectState.DAMAGED);
-            make(o.createCombChamb(0), 2, 16, ObjectState.DAMAGED);
-            make(o.createThruster(0), 0, 16, ObjectState.DAMAGED);
+            make(o.createTank(), 7, 10);
+            makePpump(9, 10);
+            makeHtank(11, 10);
+            make(o.createPump(), 5, 10, ObjectState.DAMAGED);
+            makeOtank(7, 11);
+            make(o.createPump(), 9, 11, ObjectState.DAMAGED);
+            makeOtank(11, 11);
+            //e = o.createPump();
+            //e.controller = new EndPumpController(e);
+            //make(e, 5, 11, ObjectState.DISABLED);
+            make(o.createPump(), 5, 11, ObjectState.DISABLED);
+            make(o.createCombChamb(), 2, 10);
+            make(o.createThruster(), 0, 10);
 
-            make(o.createTank(0), 7, 20, ObjectState.DAMAGED);
-            make(o.createTank(0), 9, 20);
-            make(o.createPump(0), 5, 20, ObjectState.DAMAGED);
-            make(o.createTank(0), 7, 21);
-            make(o.createTank(0), 9, 21);
-            make(o.createCompressor(0), 5, 21);
-            make(o.createCombChamb(0), 2, 20, ObjectState.DAMAGED);
-            make(o.createThruster(0), 0, 20);
+            makeOtank(7, 16);
+            make(o.createPump(), 9, 16, ObjectState.DAMAGED);
+            make(o.createTank(), 11, 16, ObjectState.DAMAGED);
+            makeMpump(5, 16);
+            makeHtank(7, 17);
+            make(o.createPump(), 9, 17, ObjectState.DAMAGED);
+            make(o.createTank(), 11, 17, ObjectState.DAMAGED);
+            make(o.createPump(), 5, 17, ObjectState.DAMAGED);
+            make(o.createCombChamb(), 2, 16, ObjectState.DAMAGED);
+            make(o.createThruster(), 0, 16, ObjectState.DAMAGED);
 
-            make(o.createTank(0), 7, 26, ObjectState.DAMAGED);
-            make(o.createTank(0), 9, 26);
-            make(o.createCompressor(0), 5, 26);
-            make(o.createTank(0), 7, 27, ObjectState.DAMAGED);
-            make(o.createTank(0), 9, 27, ObjectState.DAMAGED);
-            e = o.createPump(0);
-            e.inventory.placeItem(o.createMotor(), 0);
-            make(e, 5, 27, ObjectState.DISABLED);
-            make(o.createCombChamb(0), 2, 26, ObjectState.DAMAGED);
-            make(o.createThruster(0), 0, 26, ObjectState.DAMAGED);
+            make(o.createTank(), 7, 20, ObjectState.DAMAGED);
+            make(o.createPump(), 9, 20, ObjectState.DAMAGED);
+            makeOtank(11, 20);
+            make(o.createPump(), 5, 20, ObjectState.DAMAGED);
+            makeHtank(7, 21);
+            make(o.createPump(), 9, 21, ObjectState.DAMAGED);
+            makeHtank(11, 21);
+            make(o.createPump(), 5, 21, ObjectState.DISABLED);
+            make(o.createCombChamb(), 2, 20, ObjectState.DAMAGED);
+            make(o.createThruster(), 0, 20);
 
-            make(o.createReactor(0), 22, 12);
+            make(o.createTank(), 7, 26, ObjectState.DAMAGED);
+            make(o.createPump(), 9, 26, ObjectState.DAMAGED);
+            makeHtank(11, 26);
+            make(o.createPump(), 5, 26, ObjectState.DISABLED);
+            make(o.createTank(), 7, 27, ObjectState.DAMAGED);
+            make(o.createPump(), 9, 27, ObjectState.DAMAGED);
+            make(o.createTank(), 11, 27, ObjectState.DAMAGED);
+            makeMpump(5, 27);
+            make(o.createCombChamb(), 2, 26, ObjectState.DAMAGED);
+            make(o.createThruster(), 0, 26, ObjectState.DAMAGED);
+
+            make(o.createReactor(), 22, 12);
         }
 
         private Ship(GameEntity world)

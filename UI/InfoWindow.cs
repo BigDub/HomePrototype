@@ -19,7 +19,7 @@ namespace ShipPrototype.UI
             name.center = false;
             set(0, 0, name);
             
-            int subsections = 1;
+            int subsections = 2;
             if (info.entity_.inventory != null)
             {
                 ++subsections;
@@ -28,12 +28,27 @@ namespace ShipPrototype.UI
             {
                 ++subsections;
             }
+            if (info.entity_.controller != null && info.entity_.controller.isDrawn)
+            {
+                ++subsections;
+            }
+            Text text = new Text(info.flavorText, false);
+            text.padding_ = new Vector2(10);
+
             Window subFrames = new Window(subsections, 1);
+
             subFrames.color_ = new Color(0, 0, 0, 255);
             int subIndex = 0;
 
+            subFrames.set(subIndex++, 0, text);
+
             subFrames.set(subIndex++, 0, new StatusFrame(info));
 
+
+            if (info.entity_.controller != null && info.entity_.controller.isDrawn)
+            {
+                subFrames.set(subIndex++, 0, info.entity_.controller.getFrame());
+            }
             if (info.entity_.production != null)
             {
                 subFrames.set(subIndex++, 0, new ProductionFrame(info.entity_.production));

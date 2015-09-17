@@ -55,6 +55,7 @@ namespace ShipPrototype
             Locator.provide(new ControlManager());
             Locator.getInputHandler().addKeyReleaseObserver(Locator.getControlManager().keyRelease);
             Locator.getInputHandler().addMouseReleaseObserver(Locator.getControlManager().mouseUp);
+            Locator.getInputHandler().addMousePressObserver(Locator.getControlManager().mouseDown);
             ControlStates.BaseState.setParent(Locator.getControlManager());
 
 
@@ -72,9 +73,8 @@ namespace ShipPrototype
 
             Locator.provide(ScreenPrinter.init(Content.Load<SpriteFont>("LargeFont"), Content.Load<SpriteFont>("SmallFont")));
             Locator.provide(TextureManager.init(GraphicsDevice, Content));
-            ObjectFactory ob = new ObjectFactory();
-            ob.init();
-            Locator.provide(ob);
+            Ship.loadTextures();
+
             bg_tex_id = Locator.getTextureManager().loadTexture("spacebg");
 
             world = new GameEntity();
@@ -82,9 +82,13 @@ namespace ShipPrototype
             world.controller = new WorldController(world, screen);
             Locator.getComponentManager().addEntity(world);
             Locator.provideWorld(world);
-            Ship.loadTextures();
 
             Locator.provide(Ship.init(world));
+
+            ObjectFactory ob = new ObjectFactory();
+            ob.init();
+            Locator.provide(ob);
+
             Locator.getShip().populate();
             Locator.getControlManager().forceState(new ControlStates.Selector());
 
@@ -93,7 +97,7 @@ namespace ShipPrototype
             player.render = new Components.RenderComponent(player, Locator.getTextureManager().loadTexture("person32"), 1, new Vector2(16), Color.White);
             player.inventory = new InventoryComponent(player, 10);
             player.controller = new Components.PlayerControllerComponent(player);
-            Locator.getComponentManager().addEntity(player);
+            Locator.getComponentManager().addEntity_(player);
             Locator.providePlayer(player);
 
             test = new GameEntity();
@@ -104,6 +108,8 @@ namespace ShipPrototype
 
             Locator.provide(new WindowFactory(screen));
             Locator.getControlManager().setInventory(Locator.getWindowFactory().inventoryWindow());
+
+            Locator.getMessageBoard().postMessage(new Post(PostCategory.PLACED_OBJECT));
         }
 
         /// <summary>

@@ -39,6 +39,7 @@ namespace ShipPrototype.UI
                 buttons_[index].slot_ = index;
                 buttons_[index].getSource = getSource;
                 buttons_[index].getComponent = getComponent;
+                buttons_[index].getTarget = source_.getItem;
                 inner_.set(row, col++, buttons_[index]);
                 if (col >= maxPerLine)
                 {

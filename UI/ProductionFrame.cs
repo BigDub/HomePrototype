@@ -24,6 +24,7 @@ namespace ShipPrototype.UI
                 buttons_[index] = new ItemButton(source_, index);
                 buttons_[index].getSource = getSource;
                 buttons_[index].getComponent = getComponent;
+                buttons_[index].getTarget = source_.getItem;
             }
             bar_ = new ProgressBar();
 

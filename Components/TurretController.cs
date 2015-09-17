@@ -17,7 +17,20 @@ namespace ShipPrototype.Components
         public TurretController(GameEntity entity)
             : base(entity)
         {
-            entity.inventory.register(checkStatus);
+        }
+
+        public override Component deepCopy(GameEntity entity)
+        {
+            return new TurretController(entity);
+        }
+
+        public override void linkInput()
+        {
+            entity_.inventory.register(checkStatus);
+        }
+        public override void unlinkInput()
+        {
+            entity_.inventory.unregister(checkStatus);
         }
 
         private void checkStatus()
@@ -28,7 +41,7 @@ namespace ShipPrototype.Components
                 GameEntity item = ic.getItem(index);
                 if (item == null)
                     continue;
-                if (item.item == Locator.getObjectFactory().orbItem)
+                if (item.item.ID_ == Locator.getObjectFactory().orbItem.ID_)
                 {
                     entity_.info.state = ObjectState.OK;
                     return;

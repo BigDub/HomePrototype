@@ -6,25 +6,28 @@ using Microsoft.Xna.Framework;
 
 namespace ShipPrototype.Components
 {
-    class SpatialComponent
+    class SpatialComponent : Component
     {
-        GameEntity entity_;
-
         SpatialComponent parent_;
+        public Vector2 scale_ { get; set; }
+        private float rotation_;
+        public Vector2 translation_ { get; set; }
 
         private SpatialComponent(GameEntity entity)
+            : base(entity)
         {
-            entity_ = entity;
         }
 
-        public SpatialComponent(GameEntity entity, Vector2 translation, float rotation, Vector2 scale) : this(entity)
+        public SpatialComponent(GameEntity entity, Vector2 translation, float rotation, Vector2 scale)
+            : base(entity)
         {
             translation_ = translation;
             rotation_ = rotation;
             scale_ = scale;
         }
 
-        public SpatialComponent(GameEntity entity, SpatialComponent parent, Vector2 translation, float rotation, Vector2 scale) : this(entity)
+        public SpatialComponent(GameEntity entity, SpatialComponent parent, Vector2 translation, float rotation, Vector2 scale)
+            : base(entity)
         {
             parent_ = parent;
             translation_ = translation;
@@ -32,12 +35,23 @@ namespace ShipPrototype.Components
             scale_ = scale;
         }
 
-        public SpatialComponent(GameEntity entity, SpatialComponent parent) : this(entity)
+        public SpatialComponent(GameEntity entity, SpatialComponent parent)
+            : base(entity)
         {
             parent_ = parent;
             translation_ = Vector2.Zero;
             rotation_ = 0f;
             scale_ = Vector2.One;
+        }
+
+        public override Component deepCopy(GameEntity entity)
+        {
+            SpatialComponent c = new SpatialComponent(entity);
+            c.parent_ = parent_;
+            c.scale_ = scale_;
+            c.rotation_ = rotation_;
+            c.translation_ = translation_;
+            return c;
         }
 
         private Matrix getMatrix()
@@ -58,8 +72,6 @@ namespace ShipPrototype.Components
             return new Vector2(loc.X, loc.Y);
         }
 
-        public Vector2 translation_ { get; set; }
-        private float rotation_;
         public float rotation
         {
             get
@@ -71,7 +83,6 @@ namespace ShipPrototype.Components
                 rotation_ = value % MathHelper.TwoPi;
             }
         }
-        public Vector2 scale_ { get; set; }
 
         public Vector2 w_scale
         {

@@ -19,7 +19,8 @@ namespace ShipPrototype.Services
         END_GAME,
         SPAWN_JUNK,
         JUNK_SHOT,
-        JUNK_SPAWN
+        JUNK_SPAWN,
+        UNUSED
     };
 
     class Post
@@ -58,6 +59,11 @@ namespace ShipPrototype.Services
         public void register(Notify func)
         {
             onPost_ += func;
+        }
+
+        public void unregister(Notify func)
+        {
+            onPost_ -= func;
         }
 
         public void postMessage(Post post)

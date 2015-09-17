@@ -22,6 +22,11 @@ namespace ShipPrototype.Components
             dir_dirty = true;
         }
 
+        public override Component deepCopy(GameEntity entity)
+        {
+            return new PlayerControllerComponent(entity);
+        }
+
         public override void update(float elapsed)
         {
             if (dir_dirty)

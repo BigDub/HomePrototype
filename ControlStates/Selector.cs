@@ -16,42 +16,39 @@ namespace ShipPrototype.ControlStates
         {
         }
 
+        public override void mouseDown(object sender, MouseEventArgs e)
+        {
+            if (e.button_ == MouseButton.RIGHT)
+            {
+                GameEntity en = Locator.getComponentManager().pick(Locator.getShip().tiles, mouseTile_);
+                if (en != null && en.tile != null && en.item != null && (en.spatial.w_translation - Locator.getPlayer().spatial.w_translation).Length() < interactRange)
+                {
+                    changeState(new Removing(en));
+                }
+            }
+        }
+
         public override void onPost(Post post)
         {
             switch (post.category)
             {
                 case PostCategory.INV_SLOT:
-                    Console.WriteLine("test");
                     InventoryComponent inv = (InventoryComponent)post.component;
                     GameEntity item = inv.getItem(post.slot);
-                    Console.WriteLine("slot " + post.slot);
                     if (item != null)
                     {
-                        Console.WriteLine("item not null");
-                        if (item.info.number > 1 && Locator.getInputHandler().isKeyDown(Keys.LeftShift))
+                        if (item.item.number_ > 1 && Locator.getInputHandler().isKeyDown(Keys.LeftShift))
                         {
-                            Console.WriteLine("shift");
-                            item.info.number--;
+                            item.item.number_--;
                             item = Locator.getObjectFactory().createItem(item.item);
+                            inv.onUpdate();
                             changeState(new HoldingItem(inv, item, post.slot));
                         }
                         else
                         {
-                            Console.WriteLine("normal");
                             inv.takeItem(post.slot);
                             changeState(new HoldingItem(inv, item, post.slot));
                         }
-                    }
-                    break;
-                case PostCategory.REQUEST_ITEM:
-                    changeState(new HoldingItem((InventoryComponent)post.component, post.targetEntity, post.slot));
-                    if (post.sourceEntity.inventory != null)
-                    {
-                        post.sourceEntity.inventory.takeItem(post.slot);
-                    }
-                    else
-                    {
-                        post.sourceEntity.production.takeItem(post.slot);
                     }
                     break;
                 default:

@@ -16,9 +16,12 @@ namespace ShipPrototype.ControlStates
         void update(float elapsed);
 
         void mouseUp(object sender, MouseEventArgs e);
+        void mouseDown(object sender, MouseEventArgs e);
 
         void onPost(Services.Post post);
 
         void render(SpriteBatch spriteBatch);
+
+        void setMouseInWindow(bool b);
     }
 }

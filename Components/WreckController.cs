@@ -8,9 +8,23 @@ namespace ShipPrototype.Components
 {
     class WreckController : ControllerComponent
     {
-        public WreckController(GameEntity entity) : base(entity)
+        public WreckController(GameEntity entity)
+            : base(entity)
+        {
+        }
+
+        public override Component deepCopy(GameEntity entity)
+        {
+            return new WreckController(entity);
+        }
+
+        public override void linkInput()
         {
             Locator.getMessageBoard().register(notify);
+        }
+        public override void unlinkInput()
+        {
+            Locator.getMessageBoard().unregister(notify);
         }
 
         public void notify(Services.Post post)

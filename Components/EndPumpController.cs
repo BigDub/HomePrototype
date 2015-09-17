@@ -12,6 +12,11 @@ namespace ShipPrototype.Components
         {
         }
 
+        public override Component deepCopy(GameEntity entity)
+        {
+            return new EndPumpController(entity);
+        }
+
         public override void update(float elapsed)
         {
             if (entity_.info.state == ObjectState.OK)
@@ -24,9 +29,9 @@ namespace ShipPrototype.Components
                 GameEntity e = entity_.inventory.getItem(index);
                 if (e != null)
                 {
-                    if (e.item == Locator.getObjectFactory().pinionItem)
+                    if (e.item.ID_ == Locator.getObjectFactory().pinionItem.ID_)
                         pinion = true;
-                    if (e.item == Locator.getObjectFactory().motorItem)
+                    if (e.item.ID_ == Locator.getObjectFactory().motorItem.ID_)
                         motor = true;
                 }
             }

@@ -140,11 +140,11 @@ namespace ShipPrototype.Services
         
         public void addMouseReleaseObserver(EventHandler<MouseEventArgs> observer)
         {
-            mousePress += observer;
+            mouseRelease += observer;
         }
         public void removeMouseReleaseObverser(EventHandler<MouseEventArgs> observer)
         {
-            mousePress -= observer;
+            mouseRelease -= observer;
         }
     }
 }

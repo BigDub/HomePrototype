@@ -11,6 +11,10 @@ namespace ShipPrototype.Components
         PhysicsComponent parent_;
         List<PhysicsComponent> children_;
 
+        public float spin_;
+        public Vector2 velocity_, accel_;
+        public Vector2 growth_;
+
         private PhysicsComponent(GameEntity entity)
             : base(entity)
         {
@@ -42,6 +46,16 @@ namespace ShipPrototype.Components
             growth_ = Vector2.Zero;
         }
 
+        public override Component deepCopy(GameEntity entity)
+        {
+            PhysicsComponent c = new PhysicsComponent(entity);
+            c.spin_ = spin_;
+            c.velocity_ = velocity_;
+            c.accel_ = accel_;
+            c.growth_ = growth_;
+            return c;
+        }
+
         public virtual void update(float elapsed)
         {
             entity_.spatial.rotation += spin_ * elapsed;
@@ -50,9 +64,5 @@ namespace ShipPrototype.Components
 
             velocity_ += accel_ * elapsed;
         }
-
-        public float spin_;
-        public Vector2 velocity_, accel_;
-        public Vector2 growth_;
     }
 }

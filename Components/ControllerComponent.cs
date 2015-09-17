@@ -7,9 +7,24 @@ namespace ShipPrototype.Components
 {
     abstract class ControllerComponent : Component
     {
-        public ControllerComponent(GameEntity entity)
+        public bool isDrawn;
+        
+        public delegate void Notify();
+        public Notify notify_;
+
+        protected ControllerComponent(GameEntity entity)
             : base(entity)
         {
+            isDrawn = false;
+        }
+
+        public void register(Notify notify)
+        {
+            notify_ += notify;
+        }
+        public void unregister(Notify notify)
+        {
+            notify_ -= notify;
         }
 
         public virtual void update(float elapsed)
@@ -22,6 +37,11 @@ namespace ShipPrototype.Components
 
         public virtual void unlinkInput()
         {
+        }
+
+        public virtual UI.FrameComponent getFrame()
+        {
+            return null;
         }
     }
 }

@@ -33,11 +33,11 @@ namespace ShipPrototype.UI
         {
             if (isLarge_)
             {
-                Locator.getScreenPrinter().printLg(spriteBatch, loc, text_, color_);
+                Locator.getScreenPrinter().printLg(spriteBatch, loc + padding_, text_, color_);
             }
             else
             {
-                Locator.getScreenPrinter().printSm(spriteBatch, loc, text_, color_);
+                Locator.getScreenPrinter().printSm(spriteBatch, loc + padding_, text_, color_);
             }
         }
 

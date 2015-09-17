@@ -15,8 +15,12 @@ namespace ShipPrototype.ControlStates
     class HoldingItem : BaseState
     {
         GameEntity item_;
-        GameEntity marker;
-        UI.Text counter;
+        GameEntity marker_;
+        GameEntity ground_;
+        bool isPlaceable_;
+        bool canPlace;
+        float transTimer;
+        UI.ItemButton itemButton_;
 
         InventoryComponent origContainer_;
         int origSlot_;
@@ -25,51 +29,93 @@ namespace ShipPrototype.ControlStates
 
         public HoldingItem(InventoryComponent container, GameEntity item, int slot)
         {
+            Console.WriteLine("new HoldingItem structureID_: " + item.item.structureID_);
             item_ = item;
             origContainer_ = container;
             origSlot_ = slot;
-            marker = new GameEntity();
-            marker.spatial = new Components.SpatialComponent(marker, Vector2.Zero, 0, Vector2.One);
-            marker.render = new Components.RenderComponent(marker, item.item.tex_, 0, Vector2.Zero, Color.White);
-            counter = new UI.Text("" + item.info.number, false);
-            counter.pack();
 
             itemPlaced_ = false;
+
+            isPlaceable_ = item.item.structureID_ >= 0;
+            if (isPlaceable_)
+            {
+                marker_ = Locator.getObjectFactory().createEntity(item.item.structureID_);
+                marker_.info.state = ObjectState.DISABLED;
+                ground_ = new GameEntity();
+                ground_.spatial = new SpatialComponent(ground_, marker_.spatial);
+                ground_.spatial.scale_ = new Vector2(marker_.tile.size_.X, marker_.tile.size_.Y) * 32f;
+                ground_.render = new RenderComponent(ground_, -1, 0, new Vector2(0.5f), Color.White);
+            }
+
+            itemButton_ = new UI.ItemButton(item_);
         }
 
         public override void mouseUp(object sender, MouseEventArgs e)
         {
-            if (e.button_ == MouseButton.RIGHT)
+            switch (e.button_)
             {
-                if (origContainer_ != null && (origContainer_.entity_.spatial.w_translation - Locator.getPlayer().spatial.w_translation).Length() < interactRange)
-                {
-                    if (origContainer_.getItem(origSlot_) == null)
+                case MouseButton.LEFT:
+                    if (isPlaceable_ && !mouseInWindow_ && canPlace)
                     {
-                        origContainer_.placeItem(item_, origSlot_);
-                        itemPlaced_ = true;
-                        changeState(new Selector());
+                        Console.WriteLine("Placing " + marker_.info.name + " at " + mouseTile_.X + ", " + mouseTile_.Y);
+                        marker_.info.state = item_.item.state_;
+                        Locator.getShip().tiles.build(marker_.tile.coord_, marker_.tile.size_);
+                        Locator.getMessageBoard().postMessage(
+                            new Post(PostCategory.PLACED_OBJECT, Locator.getPlayer(), marker_, null, 0)
+                        );
+                        Locator.getComponentManager().addEntity(marker_);
+                        marker_ = null;
+                        if (item_.item.number_ > 1)
+                        {
+                            item_.item.number_--;
+                            changeState(new HoldingItem(origContainer_, item_, origSlot_));
+                        }
+                        else
+                        {
+                            changeState(new Selector());
+                        }
                     }
-                }
+                    break;
+                case MouseButton.RIGHT:
+                    if (origContainer_ != null && (origContainer_.entity_.spatial.w_translation - Locator.getPlayer().spatial.w_translation).Length() < interactRange)
+                    {
+                        if (origContainer_.getItem(origSlot_) == null)
+                        {
+                            origContainer_.placeItem(item_, origSlot_);
+                            itemPlaced_ = true;
+                            changeState(new Selector());
+                        }
+                    }
+                    break;
             }
             base.mouseUp(sender, e);
-        }
-
-        public override void changeState(ControllerState newState)
-        {
-            Debug.Assert(itemPlaced_);
-            if (marker != null)
-            {
-                Locator.getComponentManager().removeEntity(marker);
-            }
-            base.changeState(newState);
         }
 
         public override void update(float elapsed)
         {
             base.update(elapsed);
             Vector2 maus = Locator.getInputHandler().getMousePosition();
-            marker.spatial.translation_ = maus;
-            counter.loc_ = maus + new Vector2(32) - counter.size;
+            itemButton_.loc_ = maus;
+
+            if (isPlaceable_)
+            {
+                transTimer += 4f * elapsed;
+                canPlace = Locator.getShip().tiles.canBuild(mouseTile_, marker_.tile.size_);
+                marker_.tile.coord_ = mouseTile_;
+
+                if (canPlace)
+                {
+                    float alpha = 0.5f + (float)(Math.Sin(transTimer) * 0.25f);
+                    marker_.render.color_ = new Color(0.5f, 1, 0.5f, alpha);
+                    ground_.render.color_ = new Color(0.5f, 1, 0.5f, 0.5f);
+                }
+                else
+                {
+                    float alpha = 0.5f + (float)(Math.Sin(transTimer) * 0.25f);
+                    marker_.render.color_ = new Color(1, 0.5f, 0.5f, alpha);
+                    ground_.render.color_ = new Color(1, 0.5f, 0.5f, 0.5f);
+                }
+            }
         }
 
         public override void onPost(Services.Post post)
@@ -87,20 +133,21 @@ namespace ShipPrototype.ControlStates
                             itemPlaced_ = true;
                             changeState(new Selector());
                         }
-                        else if (slot.item == item_.item)
+                        else if (slot.item.ID_ == item_.item.ID_)
                         {
-                            if (item_.info.number > 1 && Locator.getInputHandler().isKeyDown(Keys.LeftShift))
+                            if (item_.item.number_ > 1 && Locator.getInputHandler().isKeyDown(Keys.LeftShift))
                             {
-                                slot.info.number++;
-                                item_.info.number--;
-                                counter.text_ = "" + item_.info.number;
-                                counter.pack();
+                                slot.item.number_++;
+                                item_.item.number_--;
+                                itemButton_.refresh(item_);
+                                inv.onUpdate();
                             }
                             else
                             {
-                                slot.info.number += item_.info.number;
+                                slot.item.number_ += item_.item.number_;
                                 itemPlaced_ = true;
                                 item_ = null;
+                                inv.onUpdate();
                                 changeState(new Selector());
                             }
                         }
@@ -108,42 +155,9 @@ namespace ShipPrototype.ControlStates
                         {
                             inv.takeItem(post.slot);
                             inv.placeItem(item_, post.slot);
-                            item_ = post.targetEntity;
-                            marker.render = new RenderComponent(marker, item_.item.tex_, 0, Vector2.Zero, Color.White);
-                            counter.text_ = "" + item_.info.number;
-                            counter.pack();
-                            origContainer_ = inv;
-                            origSlot_ = post.slot;
+                            changeState(new HoldingItem(inv, post.targetEntity, post.slot));
                         }
                     }
-                    return;
-                case PostCategory.PLACED_ITEM:
-                    if (post.sourceEntity.inventory != null)
-                    {
-                        post.sourceEntity.inventory.placeItem(item_, post.slot);
-                    }
-                    else
-                    {
-                        post.sourceEntity.production.placeItem(item_, post.slot);
-                    }
-                    itemPlaced_ = true;
-                    changeState(new Selector());
-                    return;
-                case PostCategory.REQUEST_ITEM:
-                    if (post.sourceEntity.inventory != null)
-                    {
-                        post.sourceEntity.inventory.takeItem(post.slot);
-                        post.sourceEntity.inventory.placeItem(item_, post.slot);
-                    }
-                    else
-                    {
-                        post.sourceEntity.production.takeItem(post.slot);
-                        post.sourceEntity.production.placeItem(item_, post.slot);
-                    }
-                    item_ = post.targetEntity;
-                    marker.render = new Components.RenderComponent(marker, item_.item.tex_, 0, Vector2.Zero, Color.White);
-                    origContainer_ = (InventoryComponent)post.component;
-                    origSlot_ = post.slot;
                     return;
                 default:
                     break;
@@ -153,9 +167,24 @@ namespace ShipPrototype.ControlStates
 
         public override void render(SpriteBatch spriteBatch)
         {
+            if (isPlaceable_ && !mouseInWindow_)
+            {
+                spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.NonPremultiplied);
+
+                ground_.render.render(spriteBatch);
+                marker_.render.render(spriteBatch);
+
+                spriteBatch.End();
+            }
+
             base.render(spriteBatch);
-            marker.render.render(spriteBatch);
-            counter.render(spriteBatch);
+
+            //if (!isPlaceable_ || mouseInWindow_)
+            {
+                spriteBatch.Begin();
+                itemButton_.render(spriteBatch);
+                spriteBatch.End();
+            }
         }
     }
 }

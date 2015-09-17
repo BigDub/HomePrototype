@@ -19,6 +19,13 @@ namespace ShipPrototype.UI
             size_ = new Vector2(150, 5);
         }
 
+        public ProgressBar(int width)
+        {
+            bg = Color.Gray;
+            fg = Color.Green;
+            size_ = new Vector2(width, 5);
+        }
+
         public override void render(SpriteBatch spriteBatch)
         {
             Rectangle front = new Rectangle((int)loc.X, (int)loc.Y, (int)(size_.X * percent), (int)(size_.Y));

@@ -6,11 +6,9 @@ using Microsoft.Xna.Framework;
 
 namespace ShipPrototype.Components
 {
-    class TileCoord
+    class TileCoord : Component
     {
         private static float tileSize = 32f;
-
-        public GameEntity entity_;
 
         private Point pcoord_;
         public Point coord_
@@ -29,11 +27,16 @@ namespace ShipPrototype.Components
         public TileSystemComponent tileSystem_;
 
         public TileCoord(GameEntity entity, Point coord, Point size, TileSystemComponent tileSystem)
+            : base(entity)
         {
-            entity_ = entity;
             tileSystem_ = tileSystem;
             coord_ = coord;
             size_ = size;
+        }
+
+        public override Component deepCopy(GameEntity entity)
+        {
+            return new TileCoord(entity, coord_, size_, tileSystem_);
         }
 
         public Vector2 getWorld()

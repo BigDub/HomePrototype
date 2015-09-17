@@ -24,6 +24,15 @@ namespace ShipPrototype.Components
             life_ = life;
         }
 
+        public override Component deepCopy(GameEntity entity)
+        {
+            ParticleController c = new ParticleController(entity, life_);
+            c.timed = timed;
+            c.fadeSpeed = fadeSpeed;
+            c.opacity = opacity;
+            return c;
+        }
+
         public override void update(float elapsed)
         {
             if (fadeSpeed != 0)

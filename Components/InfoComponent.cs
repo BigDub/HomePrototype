@@ -22,14 +22,14 @@ namespace ShipPrototype.Components
         DAMAGED
     };
 
-    class InfoComponent
+    class InfoComponent : Component
     {
-        public GameEntity entity_;
-
         public delegate void Notify();
         Notify notify_;
 
         public InfoComponent parent_;
+
+        public int typeID_;
 
         private bool cusName_;
         private String name_;
@@ -51,21 +51,24 @@ namespace ShipPrototype.Components
                 onUpdate();
             }
         }
-
-        private bool cusItemTex_;
-        private int itemTex_ = -1;
-        public int itemTex
+        
+        private bool cusFT_;
+        private String flavorText_;
+        public String flavorText
         {
             get
             {
-                if (cusItemTex_)
-                    return itemTex_;
-                return parent_.itemTex;
+                if (parent_ != null && !cusFT_)
+                {
+                    return parent_.flavorText;
+                }
+                return flavorText_;
             }
+
             set
             {
-                itemTex_ = value;
-                cusItemTex_ = true;
+                flavorText_ = value;
+                cusFT_ = true;
                 onUpdate();
             }
         }
@@ -103,42 +106,47 @@ namespace ShipPrototype.Components
             }
         }
 
-        public InfoComponent()
+        public InfoComponent(int typeID)
+            : base(null)
         {
-            entity_ = null;
             cusName_ = false;
-            cusItemTex_ = false;
+            cusFT_ = false;
+            flavorText_ = "";
             type_ = ObjectType.SHIPBOARD;
+            typeID_ = typeID;
         }
 
-        public InfoComponent(GameEntity entity)
+        public InfoComponent(GameEntity entity, int typeID)
+            : base(entity)
         {
-            entity_ = entity;
             cusName_ = false;
-            cusItemTex_ = false;
+            cusFT_ = false;
+            flavorText_ = "";
             type_ = ObjectType.SHIPBOARD;
+            typeID_ = typeID;
         }
         public InfoComponent(GameEntity entity, InfoComponent parent)
+            : base(entity)
         {
-            entity_ = entity;
             parent_ = parent;
             cusName_ = false;
-            cusItemTex_ = false;
+            cusFT_ = false;
+            flavorText_ = "";
             type_ = ObjectType.INHERIT;
+            typeID_ = parent_.typeID_;
         }
 
-        private int number_;
-        public int number
+        public override Component deepCopy(GameEntity entity)
         {
-            get
-            {
-                return number_;
-            }
-            set
-            {
-                number_ = value;
-                onUpdate();
-            }
+            InfoComponent c = new InfoComponent(entity, typeID_);
+            c.parent_ = parent_;
+            c.cusName_ = cusName_;
+            c.name_ = name_;
+            c.cusFT_ = cusFT_;
+            c.flavorText_ = flavorText_;
+            c.type_ = type_;
+            c.state_ = state_;
+            return c;
         }
 
         private void onUpdate()

@@ -37,6 +37,11 @@ namespace ShipPrototype.Components
             tiles_ = new TileStatus[size_.X, size_.Y];
         }
 
+        public TileArea deepCopy(TileSystemComponent parent)
+        {
+            return new TileArea(parent, size_, offset_);
+        }
+
         //parentspace
         public bool isContained(Point point)
         {
@@ -80,7 +85,7 @@ namespace ShipPrototype.Components
                     GameEntity tile = new GameEntity();
                     tile.spatial = new Components.SpatialComponent(tile, parent.spatial, new Vector2((x + offset_.X) * 32, (y + offset_.Y) * 32), 0, Vector2.One);
                     tile.render = new Components.RenderComponent(tile, tile_tex_id, 1, new Vector2(16), Color.White);
-                    Locator.getComponentManager().addEntity(tile);
+                    Locator.getComponentManager().addEntity_(tile);
                 }
             }
         }

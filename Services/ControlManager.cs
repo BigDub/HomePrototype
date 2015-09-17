@@ -59,6 +59,7 @@ namespace ShipPrototype.Services
         {
             windows = new List<Window>();
             Locator.getMessageBoard().register(onPost);
+            state = new Selector();
         }
 
         public void onPost(Services.Post post)
@@ -99,13 +100,19 @@ namespace ShipPrototype.Services
 
         public void update(float elapsed)
         {
-            if (state != null)
-            {
-                state.update(elapsed);
-            }
+            Vector2 m_pos = Locator.getInputHandler().getMousePosition();
+            state.setMouseInWindow(false);
             foreach (Window window in windows)
             {
                 window.update(elapsed);
+                if (window.isWithin(m_pos))
+                {
+                    state.setMouseInWindow(true);
+                }
+            }
+            if (state != null)
+            {
+                state.update(elapsed);
             }
             if (info != null && observing != null)
             {
@@ -129,13 +136,13 @@ namespace ShipPrototype.Services
                     {
                         case MouseButton.LEFT:
                             window.click(m_pos);
-                            break;
+                            return;
                         case MouseButton.RIGHT:
                             if (window != inventory)
                             {
                                 windows.Remove(window);
                             }
-                            break;
+                            return;
                     }
                     return;
                 }
@@ -143,6 +150,22 @@ namespace ShipPrototype.Services
             if (state != null)
             {
                 state.mouseUp(sender, e);
+            }
+        }
+
+        public void mouseDown(object sender, MouseEventArgs e)
+        {
+            Vector2 m_pos = Locator.getInputHandler().getMousePosition();
+            foreach (Window window in windows)
+            {
+                if (window.isWithin(m_pos))
+                {
+                    return;
+                }
+            }
+            if (state != null)
+            {
+                state.mouseDown(sender, e);
             }
         }
 
@@ -160,9 +183,7 @@ namespace ShipPrototype.Services
 
         public void render(SpriteBatch spriteBatch)
         {
-            spriteBatch.Begin(SpriteSortMode.Deferred, null);
             state.render(spriteBatch);
-            spriteBatch.End();
         }
     }
 }

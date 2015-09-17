@@ -41,6 +41,16 @@ namespace ShipPrototype.Components
             color_ = parent.color_;
         }
 
+        public override Component deepCopy(GameEntity entity)
+        {
+            RenderComponent c = new RenderComponent(entity);
+            c.texture_id_ = texture_id_;
+            c.layer_ = layer_;
+            c.origin_ = origin_;
+            c.color_ = color_;
+            return c;
+        }
+        
         public void render(SpriteBatch spriteBatch)
         {
             if (texture_id_ >= -1 && entity_.spatial != null)

@@ -20,6 +20,13 @@ namespace ShipPrototype.Components
             Locator.getMessageBoard().register(listen);
         }
 
+        public override Component deepCopy(GameEntity entity)
+        {
+            WorldController c = new WorldController(entity, screen_);
+            c.sticky_ = sticky_;
+            return c;
+        }
+
         void listen(Services.Post post)
         {
             if (post.category == Services.PostCategory.END_GAME)

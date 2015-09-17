@@ -19,6 +19,12 @@ namespace ShipPrototype.Components
             drift_speed = d_speed;
         }
 
+        public override Component deepCopy(GameEntity entity)
+        {
+            DriftPhysics c = new DriftPhysics(entity, max_drift, max_speed, drift_speed);
+            return c;
+        }
+
         public override void update(float elapsed)
         {
             Vector2 pos = entity_.spatial.translation_;

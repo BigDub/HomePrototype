@@ -26,6 +26,31 @@ namespace ShipPrototype.Components
             areas_ = new List<TileArea>();
         }
 
+        public override Component deepCopy(GameEntity entity)
+        {
+            TileSystemComponent c = new TileSystemComponent(entity);
+            foreach (TileArea area in areas_)
+            {
+                c.areas_.Add(area.deepCopy(c));
+            }
+            return c;
+        }
+
+        public GameEntity getEntityAt(Point point)
+        {
+            foreach (TileCoord tile in Locator.getComponentManager().tiles_)
+            {
+                if (tile.tileSystem_ != this)
+                    continue;
+                if (tile.coord_.X > point.X || tile.coord_.Y > point.Y)
+                    continue;
+                if (tile.coord_.X + tile.size_.X - 1 < point.X || tile.coord_.Y + tile.size_.Y - 1 < point.Y)
+                    continue;
+                return tile.entity_;
+            }
+            return null;
+        }
+
         public void addArea(Point size, Point offset)
         {
             TileArea area = new TileArea(this, size, offset);

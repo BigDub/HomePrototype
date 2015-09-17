@@ -17,7 +17,20 @@ namespace ShipPrototype.Components
         public TractorController(GameEntity entity)
             : base(entity)
         {
-            entity.inventory.register(checkStatus);
+        }
+
+        public override Component deepCopy(GameEntity entity)
+        {
+            return new TractorController(entity);
+        }
+
+        public override void linkInput()
+        {
+            entity_.inventory.register(checkStatus);
+        }
+        public override void unlinkInput()
+        {
+            entity_.inventory.unregister(checkStatus);
         }
 
         private void checkStatus()
@@ -28,7 +41,7 @@ namespace ShipPrototype.Components
                 GameEntity item = ic.getItem(index);
                 if (item == null)
                     continue;
-                if (item.item == Locator.getObjectFactory().orbItem)
+                if (item.item.ID_ == Locator.getObjectFactory().orbItem.ID_)
                 {
                     entity_.info.state = ObjectState.OK;
                     return;
@@ -55,8 +68,23 @@ namespace ShipPrototype.Components
 
         public override void update(float elapsed)
         {
-            if (entity_.info.state != ObjectState.OK || entity_.inventory.numItems() == entity_.inventory.capacity)
+            if (entity_.info.state != ObjectState.OK)
                 return;
+
+            if (entity_.inventory.numItems() == entity_.inventory.capacity)
+            {
+                bool scrap = false;
+                for (int i = 0; i < entity_.inventory.capacity; i++)
+                {
+                    if (entity_.inventory.getItem(i).item.ID_ == Locator.getObjectFactory().scrapItem.ID_)
+                    {
+                        scrap = true;
+                        break;
+                    }
+                }
+                if (!scrap)
+                    return;
+            }
 
             if (target_ == null)
                 findTarget();
@@ -76,10 +104,16 @@ namespace ShipPrototype.Components
                     target_ = null;
                     for (int index = 0; index < entity_.inventory.capacity; ++index)
                     {
-                        if (entity_.inventory.getItem(index) == null)
+                        GameEntity item = entity_.inventory.getItem(index);
+                        if (item == null)
                         {
                             entity_.inventory.placeItem(Locator.getObjectFactory().createScrap(), index);
                             break;
+                        }
+                        else if (item.item.ID_ == Locator.getObjectFactory().scrapItem.ID_)
+                        {
+                            item.item.number_++;
+                            entity_.inventory.onUpdate();
                         }
                     }
                 }
