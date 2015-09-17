@@ -15,7 +15,9 @@ namespace ShipPrototype.UI
         protected Vector2 size_;
         //Left, top, right, bottom
         public Vector2 padding_, minimum_;
-        public bool center = true;
+        public bool centerX = true;
+        public bool centerY = true;
+        public bool fill = false;
 
         public Vector2 loc
         {
@@ -51,7 +53,17 @@ namespace ShipPrototype.UI
             return true;
         }
 
-        public virtual void pack() { }
+        public virtual void pack()
+        {
+            if (size_.X + 2 * padding_.X < minimum_.X)
+            {
+                size_.X = minimum_.X - 2 * padding_.X;
+            }
+            if (size_.Y + 2 * padding_.Y < minimum_.Y)
+            {
+                size_.Y = minimum_.Y - 2 * padding_.Y;
+            }
+        }
 
         public virtual void click(Vector2 pos) { }
 

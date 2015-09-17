@@ -19,7 +19,7 @@ namespace ShipPrototype.UI
             source_ = source;
             padding_ = new Vector2(5);
             Text status = new Text("STATUS...", false);
-            status.center = false;
+            status.centerX = false;
             set(0, 0, status);
             statusText = new Text("", false);
             set(0, 1, statusText);

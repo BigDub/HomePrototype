@@ -78,6 +78,7 @@ namespace ShipPrototype
         {
             Locator.getComponentManager().addEntity(Locator.getObjectFactory().createEndGameFlame());
             entity_.physic.accel_ = new Vector2(50, 0);
+            Locator.getComponentManager().addEntity(Locator.getObjectFactory().createTitle());
         }
 
         public void populate()
@@ -121,30 +122,30 @@ namespace ShipPrototype
             make(o.createThruster(), 0, 6, ObjectState.DAMAGED);
 
 
-            make(o.createTank(), 7, 10);
+            make(o.createTank(), 7, 10, ObjectState.DAMAGED);
             makePpump(9, 10);
             makeHtank(11, 10);
             make(o.createPump(), 5, 10, ObjectState.DAMAGED);
             makeOtank(7, 11);
             make(o.createPump(), 9, 11, ObjectState.DAMAGED);
-            makeOtank(11, 11);
+            make(o.createTank(), 11, 11, ObjectState.DAMAGED);
             //e = o.createPump();
             //e.controller = new EndPumpController(e);
             //make(e, 5, 11, ObjectState.DISABLED);
             make(o.createPump(), 5, 11, ObjectState.DISABLED);
             make(o.createCombChamb(), 2, 10);
-            make(o.createThruster(), 0, 10);
+            make(o.createThruster(), 0, 10, ObjectState.DAMAGED);
 
-            makeOtank(7, 16);
+            make(o.createTank(), 7, 16);
             make(o.createPump(), 9, 16, ObjectState.DAMAGED);
             make(o.createTank(), 11, 16, ObjectState.DAMAGED);
             makeMpump(5, 16);
-            makeHtank(7, 17);
-            make(o.createPump(), 9, 17, ObjectState.DAMAGED);
+            make(o.createTank(), 7, 17);
+            makeMpump(9, 17);
             make(o.createTank(), 11, 17, ObjectState.DAMAGED);
             make(o.createPump(), 5, 17, ObjectState.DAMAGED);
             make(o.createCombChamb(), 2, 16, ObjectState.DAMAGED);
-            make(o.createThruster(), 0, 16, ObjectState.DAMAGED);
+            make(o.createThruster(), 0, 16);
 
             make(o.createTank(), 7, 20, ObjectState.DAMAGED);
             make(o.createPump(), 9, 20, ObjectState.DAMAGED);
@@ -164,7 +165,7 @@ namespace ShipPrototype
             make(o.createTank(), 7, 27, ObjectState.DAMAGED);
             make(o.createPump(), 9, 27, ObjectState.DAMAGED);
             make(o.createTank(), 11, 27, ObjectState.DAMAGED);
-            makeMpump(5, 27);
+            make(o.createPump(), 5, 27, ObjectState.DISABLED);
             make(o.createCombChamb(), 2, 26, ObjectState.DAMAGED);
             make(o.createThruster(), 0, 26, ObjectState.DAMAGED);
 

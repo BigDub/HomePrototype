@@ -13,11 +13,11 @@ namespace ShipPrototype.UI
         public bool isLarge_;
         public Color color_;
 
-        public Text(String text, bool isLarge)
+        public Text(String text, bool isLarge, float padding = 0)
         {
             color_ = Color.White;
             text_ = text;
-            padding_ = Vector2.Zero;
+            padding_ = new Vector2(padding);
             isLarge_ = isLarge;
             if (isLarge_)
             {

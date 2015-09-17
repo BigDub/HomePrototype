@@ -25,16 +25,12 @@ namespace ShipPrototype.ControlStates
         InventoryComponent origContainer_;
         int origSlot_;
 
-        bool itemPlaced_;
-
         public HoldingItem(InventoryComponent container, GameEntity item, int slot)
         {
             Console.WriteLine("new HoldingItem structureID_: " + item.item.structureID_);
             item_ = item;
             origContainer_ = container;
             origSlot_ = slot;
-
-            itemPlaced_ = false;
 
             isPlaceable_ = item.item.structureID_ >= 0;
             if (isPlaceable_)
@@ -82,7 +78,6 @@ namespace ShipPrototype.ControlStates
                         if (origContainer_.getItem(origSlot_) == null)
                         {
                             origContainer_.placeItem(item_, origSlot_);
-                            itemPlaced_ = true;
                             changeState(new Selector());
                         }
                     }
@@ -130,7 +125,6 @@ namespace ShipPrototype.ControlStates
                         if (slot == null)
                         {
                             inv.placeItem(item_, post.slot);
-                            itemPlaced_ = true;
                             changeState(new Selector());
                         }
                         else if (slot.item.ID_ == item_.item.ID_)
@@ -145,7 +139,6 @@ namespace ShipPrototype.ControlStates
                             else
                             {
                                 slot.item.number_ += item_.item.number_;
-                                itemPlaced_ = true;
                                 item_ = null;
                                 inv.onUpdate();
                                 changeState(new Selector());

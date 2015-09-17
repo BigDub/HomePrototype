@@ -11,10 +11,9 @@ namespace ShipPrototype.UI
     {
         public Color color_;
 
-        public Window(int rows, int columns) : base(rows, columns)
+        public Window(int rows, int columns, float padding = 0) : base(rows, columns, padding)
         {
             color_ = new Color(100, 100, 100, 200);
-            padding_ = Vector2.Zero;
         }
 
         public override void render(SpriteBatch spriteBatch)

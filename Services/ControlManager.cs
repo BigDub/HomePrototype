@@ -50,21 +50,30 @@ namespace ShipPrototype.Services
 
         Window inventory;
         Window info;
+        Window systems;
 
         GameEntity observing;
 
         ControllerState state;
 
-        public ControlManager()
+        Point screen_;
+
+        public ControlManager(Point screen)
         {
             windows = new List<Window>();
             Locator.getMessageBoard().register(onPost);
             state = new Selector();
+            screen_ = screen;
         }
 
         public void onPost(Services.Post post)
         {
             state.onPost(post);
+            if (post.category == PostCategory.END_GAME)
+            {
+                if (windows.Contains(systems))
+                    windows.Remove(systems);
+            }
         }
 
         public void forceState(ControllerState newState)
@@ -178,6 +187,16 @@ namespace ShipPrototype.Services
                 entity.physic.velocity_ = new Vector2(0, -100);
                 Locator.getComponentManager().addEntity(entity);
                 Locator.getMessageBoard().postMessage(new Post(PostCategory.JUNK_SPAWN, entity, null, null, 0));
+            }
+            if (e.key_ == Keys.I)
+            {
+                if (systems == null)
+                {
+                    systems = new SystemsWindow();
+                    systems.loc_ = new Vector2((screen_.X - systems.size.X) / 2, (screen_.Y - systems.size.Y) / 2);
+                }
+                if (!windows.Contains(systems))
+                    windows.Add(systems);
             }
         }
 

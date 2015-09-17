@@ -33,7 +33,7 @@ namespace ShipPrototype.Services
             Window window = new Window(2, 1);
             window.padding_ = new Vector2(5, 0);
             Text text = new Text("Inventory", true);
-            text.center = false;
+            text.centerY = false;
             window.set(0, 0, text);
             FrameComponent buttonframe = new FrameComponent(2, 10);
             window.set(1, 0, buttonframe);

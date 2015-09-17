@@ -16,7 +16,7 @@ namespace ShipPrototype.UI
             padding_ = new Vector2(5);
             minimum_ = new Vector2(100, 50);
             Text name = new Text(info.name, true);
-            name.center = false;
+            name.centerX = false;
             set(0, 0, name);
             
             int subsections = 2;

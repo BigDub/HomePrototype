@@ -34,8 +34,6 @@ namespace ShipPrototype.Services
             oxygenItem,
             hydrogenItem,
             gunItemInfo,
-            debrisItemInfo,
-            wreckItemInfo,
             tractorItemInfo,
             furnaceItemInfo,
             tankItemInfo,

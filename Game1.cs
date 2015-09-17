@@ -52,7 +52,7 @@ namespace ShipPrototype
             Locator.provide(InputHandler.init());
             Locator.provide(ComponentManager.init());
             Locator.provide(new Random());
-            Locator.provide(new ControlManager());
+            Locator.provide(new ControlManager(screen));
             Locator.getInputHandler().addKeyReleaseObserver(Locator.getControlManager().keyRelease);
             Locator.getInputHandler().addMouseReleaseObserver(Locator.getControlManager().mouseUp);
             Locator.getInputHandler().addMousePressObserver(Locator.getControlManager().mouseDown);
