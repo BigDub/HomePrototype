@@ -252,6 +252,7 @@ namespace ShipPrototype.Services
             e.tile = new TileCoord(e, Point.Zero, new Point(3, 2), Locator.getShip().tiles);
             e.info = new InfoComponent(e, combustInfo);
             e.inventory = new InventoryComponent(e, 2);
+            e.controller = new EngineController(e);
             e.item = new ItemInfo(e, combustItemInfo);
             return e;
         }

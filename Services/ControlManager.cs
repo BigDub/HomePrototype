@@ -71,8 +71,8 @@ namespace ShipPrototype.Services
             state.onPost(post);
             if (post.category == PostCategory.END_GAME)
             {
-                if (windows.Contains(systems))
-                    windows.Remove(systems);
+                //if (windows.Contains(systems))
+                    //windows.Remove(systems);
             }
         }
 

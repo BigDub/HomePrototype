@@ -8,6 +8,11 @@ namespace ShipPrototype.UI
 {
     class SystemsWindow : Window
     {
+        Text engineText;
+        Text thrustText;
+        Text thrustMaxText;
+        ProgressBar thrustbar;
+
         public SystemsWindow()
             : base(2, 1, 5)
         {
@@ -66,14 +71,14 @@ namespace ShipPrototype.UI
                         frame1 = new FrameComponent(1, 3, 5);
                         window.set(1, 1, frame1);
                         {
-                            text = new Text("0.0 J", false, 5);
+                            text = new Text("0.0 J ", false, 5);
                             frame1.set(0, 0, text);
 
                             bar = new ProgressBar();
                             bar.percent = 0;
                             frame1.set(0, 1, bar);
 
-                            text = new Text("0.0 J", false, 5);
+                            text = new Text("0.0 J ", false, 5);
                             frame1.set(0, 2, text);
                         }
                     }
@@ -124,8 +129,8 @@ namespace ShipPrototype.UI
                         text.centerX = false;
                         window.set(0, 0, text);
 
-                        text = new Text("0 / 6", false, 5);
-                        window.set(0, 1, text);
+                        engineText = new Text("0 / 6", false, 5);
+                        window.set(0, 1, engineText);
 
                         text = new Text("Thrust:", false, 5);
                         text.centerX = false;
@@ -134,14 +139,14 @@ namespace ShipPrototype.UI
                         frame1 = new FrameComponent(1, 3, 5);
                         window.set(1, 1, frame1);
                         {
-                            text = new Text("0 N", false, 5);
-                            frame1.set(0, 0, text);
+                            thrustText = new Text("0.0 N ", false, 5);
+                            frame1.set(0, 0, thrustText);
 
-                            bar = new ProgressBar();
-                            frame1.set(0, 1, bar);
+                            thrustbar = new ProgressBar();
+                            frame1.set(0, 1, thrustbar);
 
-                            text = new Text("47.3 MN", false, 5);
-                            frame1.set(0, 2, text);
+                            thrustMaxText = new Text("47.3 MN", false, 5);
+                            frame1.set(0, 2, thrustMaxText);
                         }
                     }
                 }
@@ -222,6 +227,24 @@ namespace ShipPrototype.UI
             #endregion
 
             pack();
+            Locator.getMessageBoard().register(onPost);
+        }
+
+        public void onPost(Services.Post post)
+        {
+            switch (post.category)
+            {
+                case Services.PostCategory.END_GAME:
+                    thrustText.text_ = "7.9 MN";
+                    thrustbar.percent = 7.9f / 39.4f;
+                    break;
+                case Services.PostCategory.REPAIRED_ENGINE:
+                    engineText.text_ = "1 / 5";
+                    thrustMaxText.text_ = "39.4 MN";
+                    break;
+                default:
+                    break;
+            }
         }
     }
 }

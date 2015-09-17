@@ -16,6 +16,7 @@ namespace ShipPrototype.Services
         REQUEST_ITEM,
         PLACED_ITEM,
         INV_SLOT,
+        REPAIRED_ENGINE,
         END_GAME,
         SPAWN_JUNK,
         JUNK_SHOT,
