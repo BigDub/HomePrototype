@@ -10,13 +10,14 @@ namespace ShipPrototype.Components
 {
     class PumpController : ItemMoverController
     {
-        bool initialSearch;
+        GameEntity tmp;
+        bool search;
         public PumpController(GameEntity e)
             : base(e)
         {
             processTime_ = 1;
             isDrawn = true;
-            initialSearch = true;
+            search = true;
         }
 
         public override Component deepCopy(GameEntity entity)
@@ -46,7 +47,8 @@ namespace ShipPrototype.Components
             {
                 case PostCategory.PLACED_OBJECT:
                 case PostCategory.REMOVED_OBJECT:
-                    checkIO();
+                    tmp = post.targetEntity;
+                    search = true;
                     break;
                 default:
                     break;
@@ -55,10 +57,10 @@ namespace ShipPrototype.Components
 
         public override void update(float elapsed)
         {
-            if (initialSearch)
+            if (search)
             {
                 checkIO();
-                initialSearch = false;
+                search = false;
             }
             base.update(elapsed);
         }
@@ -69,6 +71,7 @@ namespace ShipPrototype.Components
             GameEntity entity;
 
             point = new Point(entity_.tile.coord_.X - 1, entity_.tile.coord_.Y);
+            ComponentManager cm = Locator.getComponentManager();
             entity = entity_.tile.tileSystem_.getEntityAt(point);
             if (entity == null || entity.inventory == null)
             {

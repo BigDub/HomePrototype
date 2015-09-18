@@ -169,11 +169,6 @@ namespace ShipPrototype.Services
 
         public void update(float elapsed)
         {
-            foreach (ControllerComponent controller in controllers_)
-            {
-                controller.update(elapsed);
-            }
-
             foreach (GameEntity entity in additions_)
             {
                 addEntity_(entity);
@@ -184,6 +179,10 @@ namespace ShipPrototype.Services
                 removeEntity_(entity);
             }
             removals_.Clear();
+            foreach (ControllerComponent controller in controllers_)
+            {
+                controller.update(elapsed);
+            }
             foreach (ProductionComponent prod in prod_)
             {
                 prod.update(elapsed);

@@ -131,8 +131,8 @@ namespace ShipPrototype
             float elapsed = (float) gameTime.ElapsedGameTime.TotalSeconds;
 
             Locator.getInputHandler().update(elapsed);
-            Locator.getComponentManager().update(elapsed);
             Locator.getControlManager().update(elapsed);
+            Locator.getComponentManager().update(elapsed);
 
             //world.spatial.translation_ = new Vector2((screen.X / 2) - player.spatial.translation_.X, (screen.Y / 2) - player.spatial.translation_.Y);
 

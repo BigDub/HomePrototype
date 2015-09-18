@@ -24,7 +24,7 @@ namespace ShipPrototype.UI
             title.centerX = false;
             set(0, 0, title);
 
-            FrameComponent subFrame = new FrameComponent(1, 2);
+            FrameComponent subFrame = new FrameComponent(2, 2);
             set(1, 0, subFrame);
 
             #region LEFT
@@ -189,10 +189,40 @@ namespace ShipPrototype.UI
                     }
                 }
                 #endregion
-                #region SENSORS
-                frame = new FrameComponent(2, 1);
+                #region LIFE SUPPORT
+                frame = new FrameComponent(2, 1, 5);
                 frame.fill = true;
                 left.set(4, 0, frame);
+                {
+                    title = new Text("Life Support Systems", true);
+                    title.centerX = false;
+                    frame.set(0, 0, title);
+
+                    window = new Window(1, 2, 5);
+                    window.color_ = Color.Black;
+                    window.fill = true;
+                    frame.set(1, 0, window);
+                    {
+                        text = new Text("Oxygen:", false, 5);
+                        text.centerX = false;
+                        window.set(0, 0, text);
+
+                        text = new Text("100%", false, 5);
+                        window.set(0, 1, text);
+                    }
+                }
+                #endregion
+            }
+            #endregion
+            #region RIGHT
+            FrameComponent right = new FrameComponent(2, 1, 5);
+            right.centerY = false;
+            subFrame.set(0, 1, right);
+            {
+                #region SENSORS
+                frame = new FrameComponent(2, 1, 5);
+                frame.fill = true;
+                right.set(0, 0, frame);
                 {
                     title = new Text("Sensors", true);
                     title.centerX = false;
@@ -212,16 +242,10 @@ namespace ShipPrototype.UI
                     }
                 }
                 #endregion
-            }
-            #endregion
-            #region RIGHT
-            FrameComponent right = new FrameComponent(1, 1, 5);
-            subFrame.set(0, 1, right);
-            {
                 #region MAP
                 Map map = new Map();
                 map.padding_ = new Vector2(10);
-                right.set(0, 0, map);
+                right.set(1, 0, map);
                 #endregion
             }
             #endregion

@@ -20,8 +20,8 @@ namespace ShipPrototype.Components
         {
             if (
                 entity_.info.state != ObjectState.OK ||
-                input_ == null || input_.entity_.info.state != ObjectState.OK ||
-                output_ == null || output_.entity_.info.state != ObjectState.OK
+                input_ == null || input_.entity_.info.state == ObjectState.DAMAGED ||
+                output_ == null || output_.entity_.info.state == ObjectState.DAMAGED
                 )
                 return;
 
